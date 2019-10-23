@@ -32,7 +32,7 @@ gem 'jbuilder', '~> 2.5'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-gem 'devise'
+gem 'devise', ">= 4.7.1"
 gem 'pundit'
 gem 'geocoder'
 gem 'active_model_serializers'
