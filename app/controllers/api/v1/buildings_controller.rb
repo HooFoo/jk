@@ -5,7 +5,6 @@ module Api
     class BuildingsController < BaseController
       def show
         building = Building.find params[:id]
-        authorize building
 
         render json: building
       end

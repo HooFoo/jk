@@ -1,6 +1,8 @@
-module API
+# frozen_string_literal: true
+
+module Api
   module V1
-    class AddressController < Base
+    class AddressController < BaseController
       def index
         form = Address::IndexForm.new(params)
         result = Address::ShowService.perform form.params

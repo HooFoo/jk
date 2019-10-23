@@ -11,7 +11,8 @@ module Api
         end
 
         def perform
-          error_result errors: { address: 'Must be correct address' } if params[:address].blank?
+          return error_result errors: { address: 'Must be correct address' } if params[:address].blank?
+
           address_info = Geocoder.search(params[:address]).first
           building = Building.find_or_create_by(latitude: address_info.latitude, longitude: address_info.longitude)
           success_result data: building

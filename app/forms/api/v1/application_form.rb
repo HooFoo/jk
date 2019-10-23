@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class ApplicationForm < ApplicationForm
+    class ApplicationForm
     end
   end
 end
