@@ -12,8 +12,8 @@ describe 'Buildings API' do
           properties: {
             address: { type: :string },
             full_address: { type: :string },
-            latitude: { type: :decimal },
-            longitude: { type: :decimal },
+            latitude: { type: :number },
+            longitude: { type: :number },
             uid: { type: :string },
           }
 

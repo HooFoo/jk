@@ -35,10 +35,10 @@
                   "type": "string"
                 },
                 "latitude": {
-                  "type": "decimal"
+                  "type": "number"
                 },
                 "longitude": {
-                  "type": "decimal"
+                  "type": "number"
                 },
                 "uid": {
                   "type": "string"
