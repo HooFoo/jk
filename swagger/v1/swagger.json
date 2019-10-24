@@ -1,0 +1,53 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/buildings/:id": {
+      "get": {
+        "summary": "Retrieves the building by provided id",
+        "tags": [
+          "Buildings"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Building returned",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "string"
+                },
+                "full_address": {
+                  "type": "string"
+                },
+                "latitude": {
+                  "type": "decimal"
+                },
+                "longitude": {
+                  "type": "decimal"
+                },
+                "uid": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
