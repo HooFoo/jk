@@ -2,14 +2,14 @@
 
 require 'swagger_helper'
 
-describe 'Buildings API' do
-  path '/api/v1/buildings/{id}' do
-    get 'Retrieves the building by provided id' do
-      tags 'Buildings'
+describe 'Address API' do
+  path '/api/v1/address?address={address}' do
+    get 'Shows address' do
+      tags 'Address'
       produces 'application/json'
-      parameter name: :id, in: :path, type: :integer, required: true
+      parameter name: :address, in: :path, type: :string, required: true
 
-      response '200', 'Building returned' do
+      response '200', 'address found' do
         schema type: :object,
                properties: {
                  data: {
@@ -28,7 +28,8 @@ describe 'Buildings API' do
                    }
                  }
                }
-        let(:id) { create(:building).id }
+
+        let(:address) { create(:building).full_address }
         run_test!
       end
     end

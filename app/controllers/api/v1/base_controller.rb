@@ -7,7 +7,7 @@ module Api
         if result.success?
           render json: result.data
         else
-          render json: ErrorSerializer.new(result).to_json
+          render json: ErrorSerializer.new(result).to_json, status: :unprocessable_entity
         end
       end
     end
