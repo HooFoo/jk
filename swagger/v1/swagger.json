@@ -5,7 +5,65 @@
     "version": "v1"
   },
   "paths": {
-    "/api/v1/buildings/:id": {
+    "/api/v1/address?address={address}": {
+      "get": {
+        "summary": "Shows address",
+        "tags": [
+          "Address"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "address found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "address": {
+                        "type": "string"
+                      },
+                      "full_address": {
+                        "type": "string"
+                      },
+                      "latitude": {
+                        "type": "number"
+                      },
+                      "longitude": {
+                        "type": "number"
+                      },
+                      "uid": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/buildings/{id}": {
       "get": {
         "summary": "Retrieves the building by provided id",
         "tags": [
@@ -28,20 +86,34 @@
             "schema": {
               "type": "object",
               "properties": {
-                "address": {
-                  "type": "string"
-                },
-                "full_address": {
-                  "type": "string"
-                },
-                "latitude": {
-                  "type": "number"
-                },
-                "longitude": {
-                  "type": "number"
-                },
-                "uid": {
-                  "type": "string"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "address": {
+                        "type": "string"
+                      },
+                      "full_address": {
+                        "type": "string"
+                      },
+                      "latitude": {
+                        "type": "number"
+                      },
+                      "longitude": {
+                        "type": "number"
+                      },
+                      "uid": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
               }
             }
