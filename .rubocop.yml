@@ -1,0 +1,128 @@
+require: rubocop-rspec
+
+Documentation:
+  Enabled: false
+
+AllCops:
+  # Cop names are not displayed in offense messages by default. Change behavior
+  # by overriding DisplayCopNames, or by giving the -D/--display-cop-names
+  # option.
+  DisplayCopNames: true
+  # Style guide URLs are not displayed in offense messages by default. Change
+  # behavior by overriding DisplayStyleGuide, or by giving the
+  # -S/--display-style-guide option.
+  DisplayStyleGuide: true
+  # Extra details are not displayed in offense messages by default. Change
+  # behavior by overriding ExtraDetails, or by giving the
+  # -E/--extra-details option.
+  ExtraDetails: true
+  TargetRubyVersion: 2.5.0
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'vagrant/**/*'
+    - 'tmp/**/*'
+    - 'script/**/*'
+    - 'cookbooks/**/*'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Max: 350
+
+Metrics/AbcSize:
+  Max: 1000
+
+Metrics/CyclomaticComplexity:
+  Max: 12
+
+Metrics/PerceivedComplexity:
+  Max: 11
+
+Metrics/BlockNesting:
+  Max: 5
+
+Layout/IndentArray:
+  EnforcedStyle: consistent
+
+Layout/MultilineAssignmentLayout:
+  EnforcedStyle: same_line
+
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+  EnforcedStyleForEmptyBraces: no_space
+  SupportedStyles:
+    - space
+    - no_space
+    # 'compact' normally requires a space inside hash braces, with the exception
+    # that successive left braces or right braces are collapsed together
+    - compact
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/Lambda:
+  EnforcedStyle: literal
+  SupportedStyles:
+    - line_count_dependent
+    - lambda
+    - literal
+
+Style/AndOr:
+  # Whether `and` and `or` are banned only in conditionals (conditionals)
+  # or completely (always).
+  EnforcedStyle: conditionals
+  SupportedStyles:
+    - always
+    - conditionals
+
+Style/ClassAndModuleChildren:
+  # Checks the style of children definitions at classes and modules.
+  #
+  # Basically there are two different styles:
+  #
+  # `nested` - have each child on a separate line
+  #   class Foo
+  #     class Bar
+  #     end
+  #   end
+  #
+  # `compact` - combine definitions as much as possible
+  #   class Foo::Bar
+  #   end
+  #
+  # The compact style is only forced, for classes / modules with one child.
+  Enabled: false
+  EnforcedStyle: compact
+  SupportedStyles:
+    - nested
+    - compact
+
+Style/RegexpLiteral:
+  StyleGuide: slashes
+  AllowInnerSlashes: true
+
+Metrics/ParameterLists:
+  Max: 15
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+# https://github.com/bbatsov/rubocop/issues/3696
+Lint/EmptyWhen:
+  Enabled: false
+
+RSpec/ExpectChange:
+  EnforcedStyle: block

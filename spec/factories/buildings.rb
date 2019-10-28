@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :building do
-    address { "MyString" }
-    full_address { "MyString" }
-    latitude { "9.99" }
-    longitude { "9.99" }
-    uid { "MyString" }
+    address { FFaker::Address.city }
+    full_address { FFaker::Address.city }
+    latitude { FFaker::Geolocation.lat }
+    longitude { FFaker::Geolocation.lng }
+    uid { FFaker::Guid.guid[0..8] }
   end
 end

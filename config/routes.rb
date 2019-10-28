@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1, defaults: { format: :json } do
       resources :address, only: [:index]
-      resources :buildings, only: [:show]
+      resources :buildings, only: [:show] do
+        scope module: :buildings do
+          resources :advertisements
+        end
+      end
     end
   end
 

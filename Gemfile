@@ -38,6 +38,7 @@ group :development, :test do
   gem 'overcommit'
   gem 'therubyracer'
   gem 'execjs'
+  gem 'ffaker'
 end
 
 group :development do

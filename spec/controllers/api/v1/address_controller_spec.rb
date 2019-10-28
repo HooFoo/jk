@@ -5,7 +5,8 @@ RSpec.describe Api::V1::AddressController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do
-      get :index
+      get :index, params: {address: building.full_address}
+
       expect(response).to have_http_status(:success)
     end
   end
