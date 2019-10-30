@@ -3,7 +3,7 @@
 module Api
   module V1
     module Buildings
-      class AdvertisementsController < BaseController
+      class AdvertisementsController < Api::V1::Buildings::BaseController
         def index
           form = Advertisements::IndexForm.new params
           ads = building.advertisements.where form.params

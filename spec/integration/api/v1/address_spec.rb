@@ -15,15 +15,15 @@ describe 'Address API' do
                  data: {
                    type: :object,
                    properties: {
-                     id: { type: :string },
-                     type: { type: :string },
+                     id: {type: :string},
+                     type: {type: :string},
                      attributes: {
                        type: :object,
-                       address: { type: :string },
-                       full_address: { type: :string },
-                       latitude: { type: :number },
-                       longitude: { type: :number },
-                       uid: { type: :string }
+                       address: {type: :string},
+                       full_address: {type: :string},
+                       latitude: {type: :number},
+                       longitude: {type: :number},
+                       uid: {type: :string}
                      }
                    }
                  }
