@@ -5,7 +5,7 @@ module Api
     class BuildingsController < BaseController
       def index
         form = Buildings::IndexForm.new params
-        buildings = Building.within_bounding_box(*form.params)
+        buildings = Building.within_bounding_box([form.params[:sw], form.params[:ne]])
 
         render json: buildings
       end
