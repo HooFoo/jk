@@ -9,14 +9,14 @@ Home Spot Backend application
 
 ## Development preparation
 
-# Backend
+### Backend
 ```
 bundle install
 rails db:migrate
 rails s
 ```
 
-# Fronend
+### Fronend
 ```
 cd ./front
 npm install
