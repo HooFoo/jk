@@ -1,6 +1,6 @@
 # README
 
-Home Spot Backend application 
+Home Spot Backend application
 
 [![CircleCI](https://circleci.com/gh/HooFoo/jk/tree/master.svg?style=svg)](https://circleci.com/gh/HooFoo/jk/tree/master)
 
@@ -9,13 +9,21 @@ Home Spot Backend application
 
 ## Development preparation
 
+# Backend
 ```
 bundle install
 rails db:migrate
 rails s
 ```
 
-## Testing 
+# Fronend
+```
+cd ./front
+npm install
+npm run start
+```
+
+## Testing
 ```
 RAILS_ENV=test rails db:migrate
 rspec
