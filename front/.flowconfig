@@ -1,0 +1,12 @@
+[ignore]
+<PROJECT_ROOT>/node_modules/react-leafleat/lib/.*\.js.flow
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]
