@@ -23,6 +23,12 @@ npm install
 npm run start
 ```
 
+### All in one 
+```
+gem install foreman 
+foreman start
+```
+
 ## Testing
 ```
 RAILS_ENV=test rails db:migrate
