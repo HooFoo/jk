@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/styles';
 
 import TopBar from '../../components/shared/top-bar';
-import MapYandexWrapper from '../../components/pages/address-select/map-yandex-wrapper';
+import MapYandexWrapper from '../../containers/pages/address-select/map-yandex-wrapper';
 
 class AddressSelectPage extends Component {
   render() {
