@@ -4,6 +4,6 @@ export default class Building {
   }
 
   location() {
-    return [this.latitude, this.longtitude];
+    return [this.latitude, this.longitude];
   }
 }

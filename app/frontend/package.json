@@ -17,6 +17,7 @@
     "@react-google-maps/api": "^1.7.7",
     "axios": "^0.19.0",
     "babel-eslint": "^10.0.3",
+    "humps": "^2.0.1",
     "leaflet": "^1.5.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
