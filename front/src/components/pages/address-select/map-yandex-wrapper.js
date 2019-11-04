@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from "@material-ui/styles";
-import withServices from "../../../services/service-injection";
 import { Subject } from "rxjs";
 
 class MapYandexWrapper extends Component {
   static propTypes = {
     classes: PropTypes.object,
-    httpService: PropTypes.object,
+    httpService: PropTypes.object.isRequired,
+    buildingsRepository: PropTypes.func.isRequired
   }
 
   state = {
@@ -45,6 +45,7 @@ class MapYandexWrapper extends Component {
             draggable: false
           });
 
+
           this.map.geoObjects.add(placemark);
           chatLocations.push({
             placemark,
@@ -66,12 +67,27 @@ class MapYandexWrapper extends Component {
       controls: []
     }
     const { ymaps } = window;
-
+    const { buildingsRepository } = this.props;
 
     ymaps.ready(() => {
       this.map = new ymaps.Map('map', mapParams);
 
       this.map.events.add('click', (e) => { this.setChatPlacemark(e.get('coords')); });
+
+      this.map.events.add('boundschange', (e) => {
+        const bounds = e.originalEvent.newBounds;
+
+        const boundary = {
+          sw_lat: bounds[0][0],
+          sw_lng: bounds[0][1],
+          ne_lat: bounds[1][0],
+          ne_lng: bounds[1][1],
+        }
+
+        buildingsRepository.index(boundary).then((buildings) => {
+          console.log(buildings)
+        })
+      } );
 
       const searchControl = new ymaps.control.SearchControl({
         options: {
@@ -212,4 +228,4 @@ const useStyles = () => ({
   },
 });
 
-export default withServices(withStyles(useStyles)(MapYandexWrapper));
+export default withStyles(useStyles)(MapYandexWrapper);
