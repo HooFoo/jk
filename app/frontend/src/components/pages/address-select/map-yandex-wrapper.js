@@ -49,7 +49,7 @@ class MapYandexWrapper extends Component {
     const { ymaps } = window;
     const mapParams = {
       center: [59.95, 30.31],
-      zoom: 10,
+      zoom: 6,
       controls: []
     };
 
@@ -117,7 +117,6 @@ class MapYandexWrapper extends Component {
       .then((result) => {
         this.map.geoObjects.add(result.geoObjects);
         this.map.setCenter(result.geoObjects.position);
-        this.map.setZoom(zoom);
       });
   }
 
@@ -166,10 +165,10 @@ class MapYandexWrapper extends Component {
   // Определяем адрес по координатам (обратное геокодирование).
   getAddress(coords) {
     const { ymaps } = window;
-    const { chatLocations }  = this.state;
+    const { newChatPlacemark }  = this.state;
     const { onAddressSelect } = this.props;
 
-    let { newChatPlacemark, newChatAttributes } = this.state;
+    let { newChatAttributes } = this.state;
 
     newChatPlacemark.properties.set('iconCaption', 'поиск...');
     ymaps.geocode(coords, {
@@ -193,26 +192,15 @@ class MapYandexWrapper extends Component {
 
       const coordinates = firstGeoObject.geometry.getCoordinates();
 
-      const existedChat = chatLocations.find(x => x.chatDetails.address == address);
+      newChatPlacemark.geometry.setCoordinates(coordinates);
+      newChatPlacemark.properties
+        .set({
+          iconCaption: address,
+          balloonContentBody: `<p>${address}</p> `
+        });
 
-      if (existedChat) {
-        existedChat.placemark.balloon.open();
-        this.map.geoObjects.remove(newChatPlacemark);
-        newChatPlacemark = null;
-        this.setState({ newChatPlacemark });
-      } else {
-        newChatPlacemark.geometry.setCoordinates(coordinates);
-        newChatPlacemark.properties
-          .set({
-            iconCaption: address,
-            balloonContentHeader: 'Создать чат',
-            balloonContentBody: `<p>${address}</p> ` +
-              '<button>Создать в чат</button>',
-          });
-
-        newChatPlacemark.balloon.open();
-      }
-      //this.map.setCenter(coordinates);
+      newChatPlacemark.balloon.open();
+      this.map.setCenter(coordinates);
     });
   }
 
