@@ -1,0 +1,15 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "buildings",
+      "attributes": {
+        "address": null,
+        "full-address": "Science Teacher Training Center, Ratchawithi Road, Muang Chiang Mai, Chiang Mai, Chiang Mai Province, 4452, Thailand",
+        "latitude": "18.790876",
+        "longitude": "98.988048",
+        "uid": "1074669391"
+      }
+    }
+  ]
+}

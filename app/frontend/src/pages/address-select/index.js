@@ -2,15 +2,17 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { go } from '../../helpers/navigation-helper';
+import { notBlank } from "../../helpers/ramda-helper";
 
-import {Button, Container, Grid, Snackbar, Typography, IconButton, CloseIcon} from '@material-ui/core';
+import { Button, Container, Grid, Snackbar, Typography } from '@material-ui/core';
 
 import MapYandexWrapper from '../../containers/pages/address-select/map-yandex-wrapper';
+
 
 class AddressSelectPage extends Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
     addressRepository: PropTypes.func.isRequired
   };
 
@@ -21,20 +23,24 @@ class AddressSelectPage extends Component {
   };
 
   onButtonClick = () => {
-    const { addressRepository } = this.props;
-    const { address } = this.state;
+    const { addressRepository, history } = this.props;
+    const { address, uid } = this.state;
 
     this.setState({ loading: true });
-    return addressRepository.index(address)
-      .then((building) => {
-        go(`/building/${building.uid}`);
-      })
-      .catch(()=>{
-        this.setState({ error: 'Адрес не может быть загружен' });
-      })
-      .finally(()=>{
-        this.setState({ loading: false });
-      });
+    if (notBlank(uid)) {
+      return history.push(`/building/${uid}`)
+    } else {
+      return addressRepository.index(address)
+        .then((building) => {
+          history.push(`/building/${building.uid}`);
+        })
+        .catch(()=>{
+          this.setState({ error: 'Адрес не может быть загружен' });
+        })
+        .finally(()=>{
+          this.setState({ loading: false });
+        });
+    }
   };
 
   onSnackbarClose = () => {
@@ -69,7 +75,7 @@ class AddressSelectPage extends Component {
             }
           </Grid>
         </Grid>
-        <Snackbar open={error} onClose={this.onSnackbarClose} message={error} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} autoHideDuration={2000} />
+        <Snackbar open={notBlank(error)} onClose={this.onSnackbarClose} message={error} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} autoHideDuration={2000} />
       </Container>
     </Fragment>;
   }
