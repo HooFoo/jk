@@ -2,7 +2,7 @@ import http from '../helpers/fetch-helpers';
 import Building from "../models/building";
 
 export default class BuildingRepository {
-  static baseUrl = '/api/v1/buildings';
+  static baseUrl = '/api/v1/buildings/';
 
   static index(boundary = {}) {
     return http.get(this.baseUrl, boundary)
