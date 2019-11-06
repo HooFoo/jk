@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles'
-import Routes from './routes'
 import { blue, indigo } from '@material-ui/core/colors'
+
+import Routes from './routes'
 
 const theme = createMuiTheme({
   palette: {
@@ -21,7 +22,6 @@ const theme = createMuiTheme({
     // ].join(',')
   }
 });
-
 
 class App extends Component {
   render() {

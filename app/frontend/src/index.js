@@ -1,6 +1,5 @@
-import "../public/mockdata/chat-locations.json";
+import {} from './mock-data-import';
 import "../public/manifest.json";
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';

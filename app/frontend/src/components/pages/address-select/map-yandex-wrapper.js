@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from "@material-ui/styles";
-import { Subject } from "rxjs";
 
 class MapYandexWrapper extends Component {
   static propTypes = {
     classes: PropTypes.object,
-    httpService: PropTypes.object.isRequired,
-    buildingsRepository: PropTypes.func.isRequired
-  }
+    buildingsRepository: PropTypes.func.isRequired,
+
+    onAddressSelect: PropTypes.func.isRequired
+  };
 
   state = {
     hasLocation: false,
@@ -16,44 +16,25 @@ class MapYandexWrapper extends Component {
       lat: 59.95,
       lng: 30.31,
     },
-    chatLocations: [],
+    buildings: [],
     newChatPlacemark: null,
     newChatAttributes: null,
-  }
+  };
 
   map;
-  mapSubject = new Subject();
 
-  constructor(props) {
-    super(props);
-    const { chatLocations } = this.state;
-    const { httpService } = this.props;
+  existingChatPlacemark(building) {
+    const { onAddressSelect } = this.props;
     const { ymaps } = window;
 
-    this.mapSubject.subscribe(() => {
-      httpService.getChatLocations().then(x => {
-        for (let i = 0; i < x.data.items.length; i++) {
-          const chat = x.data.items[i];
-
-          const placemark = new ymaps.Placemark([chat.latitude, chat.longitude], {
-            iconCaption: chat.address,
-            balloonContentHeader: 'Существующий чат',
-            balloonContentBody: `<p>${chat.address}</p> ` +
-              '<button>Перейти в чат</button>',
-          }, {
-            preset: 'islands#redDotIcon',
-            draggable: false
-          });
-
-
-          this.map.geoObjects.add(placemark);
-          chatLocations.push({
-            placemark,
-            chatDetails: chat
-          });
-        }
-      });
+    const placemark = new ymaps.Placemark(building.location(), {
+      balloonContentBody: `<p>${building.address}</p> `
+    }, {
+      preset: 'islands#blueHomeIcon',
+      draggable: false
     });
+    placemark.events.add('click', () => {onAddressSelect(building.address, building.uid)});
+    return placemark;
   }
 
   componentDidMount() {
@@ -61,63 +42,82 @@ class MapYandexWrapper extends Component {
       return;
     }
 
+    this.setupMap();
+  }
+
+  setupMap() {
+    const { ymaps } = window;
     const mapParams = {
       center: [59.95, 30.31],
-      zoom: 14,
+      zoom: 6,
       controls: []
-    }
-    const { ymaps } = window;
-    const { buildingsRepository } = this.props;
+    };
 
     ymaps.ready(() => {
       this.map = new ymaps.Map('map', mapParams);
-
+      this.setCenterLocation();
+      this.setupSearchControl();
+      this.addBoundsChangeEvent();
       this.map.events.add('click', (e) => { this.setChatPlacemark(e.get('coords')); });
+    })
+  }
 
-      this.map.events.add('boundschange', (e) => {
-        const bounds = e.originalEvent.newBounds;
+  addBoundsChangeEvent() {
+    const { buildingsRepository } = this.props;
+    this.map.events.add('boundschange', (e) => {
+      const bounds = e.originalEvent.newBounds;
 
-        const boundary = {
-          sw_lat: bounds[0][0],
-          sw_lng: bounds[0][1],
-          ne_lat: bounds[1][0],
-          ne_lng: bounds[1][1],
-        }
+      const boundary = {
+        sw_lat: bounds[0][0],
+        sw_lng: bounds[0][1],
+        ne_lat: bounds[1][0],
+        ne_lng: bounds[1][1],
+      };
 
-        buildingsRepository.index(boundary).then((buildings) => {
-          console.log(buildings)
+      buildingsRepository.index(boundary).then((buildings) => {
+        this.setState({ buildings });
+
+        buildings.map((building)=>{
+          const placemark = this.existingChatPlacemark(building);
+          this.map.geoObjects.add(placemark);
         })
-      } );
-
-      const searchControl = new ymaps.control.SearchControl({
-        options: {
-          float: 'right',
-          floatIndex: 100,
-          fitMaxWidth: true,
-          noPopup: true,
-          noPlacemark: true,
-          searchControlMaxWidth: [30, 72, 500],
-        }
-      });
-
-      searchControl.events.add('resultselect', function (e) {
-        this.onResultSelect(e, searchControl);
-      }, this);
-
-      this.map.controls.add(searchControl);
-
-      ymaps.geolocation.get({
-        mapStateAutoApply: true,
-        autoReverseGeocode: true
       })
-        .then((result) => {
-          this.map.geoObjects.add(result.geoObjects);
-          this.map.setCenter(result.geoObjects.position);
-          this.map.setZoom(zoom);
-        });
+    } );
+  }
 
-      this.mapSubject.next(this.map);
+  setupSearchControl() {
+    const { ymaps } = window;
+
+    const searchControl = new ymaps.control.SearchControl({
+      options: {
+        float: 'right',
+        kind: 'house',
+        floatIndex: 100,
+        fitMaxWidth: true,
+        noPopup: true,
+        noPlacemark: true,
+        size: 'auto',
+      }
     });
+
+    searchControl.events.add('resultselect', function (e) {
+      this.onResultSelect(e, searchControl);
+    }, this);
+
+    this.map.controls.add(searchControl);
+  }
+
+  setCenterLocation() {
+    const { ymaps } = window;
+
+    ymaps.geolocation.get({
+      mapStateAutoApply: true,
+      autoReverseGeocode: true
+    })
+      .then((result) => {
+        this.map.geoObjects.add(result.geoObjects);
+        this.map.setCenter(result.geoObjects.position);
+      });
   }
 
   onResultSelect(event, searchControl) {
@@ -149,7 +149,7 @@ class MapYandexWrapper extends Component {
     });
     this.setState({ newChatPlacemark });
     this.getAddress(coords);
-  }
+  };
 
   createPlacemark(coords) {
     const { ymaps } = window;
@@ -165,8 +165,10 @@ class MapYandexWrapper extends Component {
   // Определяем адрес по координатам (обратное геокодирование).
   getAddress(coords) {
     const { ymaps } = window;
-    const { chatLocations }  = this.state;
-    let { newChatPlacemark, newChatAttributes } = this.state;
+    const { newChatPlacemark }  = this.state;
+    const { onAddressSelect } = this.props;
+
+    let { newChatAttributes } = this.state;
 
     newChatPlacemark.properties.set('iconCaption', 'поиск...');
     ymaps.geocode(coords, {
@@ -185,28 +187,20 @@ class MapYandexWrapper extends Component {
       }
 
       const address = firstGeoObject.getAddressLine();
+
+      onAddressSelect(address);
+
       const coordinates = firstGeoObject.geometry.getCoordinates();
 
-      const existedChat = chatLocations.find(x => x.chatDetails.address == address);
+      newChatPlacemark.geometry.setCoordinates(coordinates);
+      newChatPlacemark.properties
+        .set({
+          iconCaption: address,
+          balloonContentBody: `<p>${address}</p> `
+        });
 
-      if (existedChat) {
-        existedChat.placemark.balloon.open();
-        this.map.geoObjects.remove(newChatPlacemark);
-        newChatPlacemark = null;
-        this.setState({ newChatPlacemark });
-      } else {
-        newChatPlacemark.geometry.setCoordinates(coordinates);
-        newChatPlacemark.properties
-          .set({
-            iconCaption: address,
-            balloonContentHeader: 'Создать чат',
-            balloonContentBody: `<p>${address}</p> ` +
-              '<button>Создать в чат</button>',
-          });
-
-        newChatPlacemark.balloon.open();
-      }
-      //this.map.setCenter(coordinates);
+      newChatPlacemark.balloon.open();
+      this.map.setCenter(coordinates);
     });
   }
 
@@ -222,9 +216,9 @@ class MapYandexWrapper extends Component {
 
 const useStyles = () => ({
   mapContainer: {
-    "height": "calc(100vh - 64px)",
-    "width": '100%',
-    "margin": '0 auto',
+    height: "50vh",
+    width: '100%',
+    margin: '0 auto'
   },
 });
 

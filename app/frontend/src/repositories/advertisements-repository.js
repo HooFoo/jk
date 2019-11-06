@@ -1,7 +1,7 @@
 import http from '../helpers/fetch-helpers';
 import Advertisement from "../models/advertisement";
 
-export default class BuildingRepository {
+export default class AdvertisementRepository {
   static baseUrl = '/api/v1/buildings/{building_id}/advertisements';
 
   static index(building_id) {
