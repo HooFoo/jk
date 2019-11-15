@@ -5,7 +5,12 @@ import { withStyles } from '@material-ui/styles';
 import { BottomNavigation, BottomNavigationAction, Container, Typography } from '@material-ui/core';
 import { Favorite, Restore }  from '@material-ui/icons';
 
-import Advertisements from '../../containers/pages/building/advertisements';
+import inject from "../../helpers/inject";
+import AdvertisementsRepository from '../../repositories/advertisements-repository';
+import BuildingRepository from '../../repositories/building-repository';
+
+import Advertisements from '../../components/pages/building/advertisements';
+import TopBar from '../../components/shared/top-bar';
 
 class BuildingPage extends Component {
   static propTypes = {
@@ -37,6 +42,7 @@ class BuildingPage extends Component {
     const { value } = this.state;
 
     return (<Fragment>
+      <TopBar></TopBar>
       <Container maxWidth="md">
         <Typography variant="h1">Building Page: {uid}</Typography>
         <Advertisements uid={uid} />
@@ -52,4 +58,9 @@ class BuildingPage extends Component {
 const useStyles = () => ({
 });
 
-export default withStyles(useStyles)(BuildingPage);
+const dependencies = {
+  advertisementsRepository: AdvertisementsRepository,
+  buildingsRepository: BuildingRepository
+};
+
+export default withStyles(useStyles)(inject(dependencies, BuildingPage));

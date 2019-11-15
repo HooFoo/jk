@@ -64,7 +64,9 @@ export default {
 const mockedUrls = {
   "/api/v1/address": "address.json",
   "/api/v1/buildings/": "buildings.json",
-  "/api/v1/buildings/1/advertisements": "advertisements.json"
+  "/api/v1/buildings/1074669391/advertisements": "advertisements.json",
+  "/api/v1/buildings/1074669392/advertisements": "advertisements.json",
+  "/api/v1/buildings/1074669393/advertisements": "advertisements.json",
 };
 
 function execute(url, action) {

@@ -6,8 +6,10 @@ import { notBlank } from "../../helpers/ramda-helper";
 
 import { Button, Container, Grid, Snackbar, Typography } from '@material-ui/core';
 
-import MapYandexWrapper from '../../containers/pages/address-select/map-yandex-wrapper';
+import inject from "../../helpers/inject";
+import AddressRepository from "../../repositories/address-repository";
 
+import MapYandexWrapper from '../../components/pages/address-select/map-yandex-wrapper';
 
 class AddressSelectPage extends Component {
   static propTypes = {
@@ -92,4 +94,8 @@ const useStyles = () => ({
   }
 });
 
-export default withStyles(useStyles)(AddressSelectPage);
+const dependencies = {
+  addressRepository: AddressRepository
+};
+
+export default withStyles(useStyles)(inject(dependencies, AddressSelectPage));
