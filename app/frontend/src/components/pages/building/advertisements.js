@@ -52,6 +52,7 @@ class Advertisements extends Component {
           </GridListTile>
           {advertisements.map((tile, index) => (
             <GridListTile key={index}>
+              <img src={tile.img} alt={tile.title} />
               <GridListTileBar
                 title={tile.title}
                 subtitle={<span>by: {tile.description}</span>}

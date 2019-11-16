@@ -2,14 +2,14 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { notBlank } from "../../helpers/ramda-helper";
+import { notBlank } from "../helpers/ramda-helper";
 
 import { Button, Container, Grid, Snackbar, Typography } from '@material-ui/core';
 
-import inject from "../../helpers/inject";
-import AddressRepository from "../../repositories/address-repository";
+import inject from "../helpers/inject";
+import AddressRepository from "../repositories/address-repository";
 
-import MapYandexWrapper from '../../components/pages/address-select/map-yandex-wrapper';
+import MapYandexWrapper from '../components/pages/address-select/map-yandex-wrapper';
 
 class AddressSelectPage extends Component {
   static propTypes = {

@@ -5,12 +5,12 @@ import { withStyles } from '@material-ui/styles';
 import { BottomNavigation, BottomNavigationAction, Container, Typography } from '@material-ui/core';
 import { Favorite, Restore }  from '@material-ui/icons';
 
-import inject from "../../helpers/inject";
-import AdvertisementsRepository from '../../repositories/advertisements-repository';
-import BuildingRepository from '../../repositories/building-repository';
+import inject from "../helpers/inject";
+import AdvertisementsRepository from '../repositories/advertisements-repository';
+import BuildingRepository from '../repositories/building-repository';
 
-import Advertisements from '../../components/pages/building/advertisements';
-import TopBar from '../../components/shared/top-bar';
+import Advertisements from '../components/pages/building/advertisements';
+import BottomBar from '../components/shared/bottom-bar';
 
 class BuildingPage extends Component {
   static propTypes = {
@@ -42,20 +42,29 @@ class BuildingPage extends Component {
     const { value } = this.state;
 
     return (<Fragment>
-      <TopBar></TopBar>
       <Container maxWidth="md">
-        <Typography variant="h1">Building Page: {uid}</Typography>
+        <Typography variant="h5">Building Page: {uid}</Typography>
         <Advertisements uid={uid} />
-        <BottomNavigation value={value} onChange={this.handleChange} className={classes.root}>
+      </Container>
+
+      <BottomBar>
+        <div className={classes.bottomNavigation}>
           <BottomNavigationAction label="Чат" value="chat" icon={<Restore />} />
           <BottomNavigationAction label="Объявления" value="advertisements" icon={<Favorite />} />
-        </BottomNavigation>
-      </Container>
+        </div>
+      </BottomBar>
     </Fragment>);
   }
 }
 
 const useStyles = () => ({
+  bottomNavigation: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    margin: '0 auto',
+    width: '400px',
+  }
 });
 
 const dependencies = {

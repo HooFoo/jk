@@ -1,8 +1,8 @@
 import React from 'react'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
-import AddressSelectPage from './pages/address-select/index'
-import BuildingPage from './pages/building/index'
+import AddressSelectPage from './pages/address-select'
+import BuildingPage from './pages/building'
 
 export default function Routes() {
   return <Router>
