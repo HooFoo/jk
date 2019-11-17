@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles'
-import { blue, indigo } from '@material-ui/core/colors'
+import { blue, grey } from '@material-ui/core/colors'
 
 import Routes from './routes'
 
@@ -11,7 +11,7 @@ const theme = createMuiTheme({
       main: blue[900]
     },
     primary: {
-      main: indigo[700]
+      main: grey[300]
     }
   },
   typography: {
