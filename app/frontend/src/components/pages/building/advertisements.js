@@ -73,24 +73,17 @@ class Advertisements extends Component {
   }
 }
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
+const useStyles = (theme) => ({
     root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      overflow: 'hidden',
-      backgroundColor: theme.palette.background.paper,
+      height: 'calc(100vh - 77px)',
+      overflow: 'auto',
     },
     gridList: {
-      width: 500,
-      height: 450,
     },
     icon: {
       color: 'rgba(255, 255, 255, 0.54)',
     },
-  }),
-);
+  });
 
 const dependencies = {
   advertisementsRepository: AdvertisementRepository

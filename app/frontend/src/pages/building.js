@@ -42,7 +42,7 @@ class BuildingPage extends Component {
     const { value } = this.state;
 
     return (<Fragment>
-      <Container maxWidth="md">
+      <Container maxWidth="md" className={classes.content}>
         <Typography variant="h5">Building Page: {uid}</Typography>
         <Advertisements uid={uid} />
       </Container>
@@ -58,6 +58,12 @@ class BuildingPage extends Component {
 }
 
 const useStyles = () => ({
+  root: {
+    height: 'calc(100vh - 64px)',
+  },
+  content: {
+    padding: 0,
+  },
   bottomNavigation: {
     position: 'absolute',
     left: 0,
