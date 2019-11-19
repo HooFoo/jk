@@ -2,8 +2,13 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { BottomNavigation, BottomNavigationAction, Container, Typography } from '@material-ui/core';
-import { Favorite, Restore }  from '@material-ui/icons';
+import { Container, Typography } from '@material-ui/core';
+
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+import ChatTwoToneIcon from '@material-ui/icons/ChatTwoTone';
+import AddShoppingCartTwoToneIcon from '@material-ui/icons/AddShoppingCartTwoTone';
 
 import inject from "../helpers/inject";
 import AdvertisementsRepository from '../repositories/advertisements-repository';
@@ -23,7 +28,7 @@ class BuildingPage extends Component {
   }
 
   state = { 
-    value: "chat",
+    value: "advertisements",
   }
 
   constructor(props) {
@@ -42,16 +47,27 @@ class BuildingPage extends Component {
     const { value } = this.state;
 
     return (<Fragment>
+
       <Container maxWidth="md" className={classes.content}>
         <Typography variant="h5">Building Page: {uid}</Typography>
-        <Advertisements uid={uid} />
+        { value == "advertisements" &&
+          <Advertisements uid={uid} />
+        }
       </Container>
 
       <BottomBar>
-        <div className={classes.bottomNavigation}>
-          <BottomNavigationAction label="Чат" value="chat" icon={<Restore />} />
-          <BottomNavigationAction label="Объявления" value="advertisements" icon={<Favorite />} />
-        </div>
+        <Tabs
+            value={value}
+            onChange={this.handleChange}
+            variant="scrollable"
+            scrollButtons="on"
+            indicatorColor="secondary"
+            textColor="secondary"
+            aria-label="scrollable force tabs example"
+          >
+          <Tab icon={<ChatTwoToneIcon />} value="chat" />
+          <Tab icon={<AddShoppingCartTwoToneIcon />} value="advertisements" />
+        </Tabs>
       </BottomBar>
     </Fragment>);
   }

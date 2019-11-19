@@ -25,6 +25,7 @@ class BottomBar extends Component {
             </IconButton>
             <div className={classes.grow} />
             {children}
+            <div className={classes.grow} />
             <IconButton edge="end" color="inherit">
               <MoreIcon />
             </IconButton>
@@ -42,7 +43,7 @@ const useStyles = (theme) => ({
     bottom: 0,
   },
   grow: {
-    flexGrow: 1,
+    flexGrow: 0.5,
   },
 });
 
