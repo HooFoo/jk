@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from "@material-ui/styles";
+import inject from "../../../helpers/inject";
+
+import BuildingRepository from "../../../repositories/building-repository";
 
 class MapYandexWrapper extends Component {
   static propTypes = {
@@ -222,4 +225,9 @@ const useStyles = () => ({
   },
 });
 
-export default withStyles(useStyles)(MapYandexWrapper);
+
+const dependencies = {
+  buildingsRepository: BuildingRepository
+};
+
+export default withStyles(useStyles)(inject(dependencies, MapYandexWrapper));

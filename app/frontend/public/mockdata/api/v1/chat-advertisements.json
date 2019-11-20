@@ -1,0 +1,160 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title1",
+        "description": "Description1",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
+      }
+    },
+    {
+      "id": "2",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title2",
+        "description": "Description2",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/camera.jpg"
+      }
+    },
+    {
+      "id": "3",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title3",
+        "description": "Description3",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
+      }
+    },
+    {
+      "id": "4",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title4",
+        "description": "Description4",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/camera.jpg"
+      }
+    },
+    {
+      "id": "5",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title5",
+        "description": "Description5",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
+      }
+    },
+    {
+      "id": "5",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title5",
+        "description": "Description5",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
+      }
+    },
+    {
+      "id": "6",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title6",
+        "description": "Description6",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
+      }
+    },
+    {
+      "id": "7",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title7",
+        "description": "Description7",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
+      }
+    },
+    {
+      "id": "8",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title8",
+        "description": "Description8",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
+      }
+    },
+    {
+      "id": "9",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title9",
+        "description": "Description9",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
+      }
+    },
+    {
+      "id": "10",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title10",
+        "description": "Description10",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
+      }
+    },
+    {
+      "id": "8",
+      "type": "advertisements",
+      "attributes": {
+        "title": "Title11",
+        "description": "Description11",
+        "price": 1000,
+        "currency": "RUB",
+        "due-in": "2019-10-22T06:15:20.791Z",
+        "category": null,
+        "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
+      }
+    }
+  ]
+}

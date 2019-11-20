@@ -4,11 +4,33 @@
       "id": "1",
       "type": "buildings",
       "attributes": {
-        "address": "Science Teacher Training Center",
-        "full-address": "Science Teacher Training Center, Ratchawithi Road, Muang Chiang Mai, Chiang Mai, Chiang Mai Province, 4452, Thailand",
-        "latitude": "18.790876",
-        "longitude": "98.988048",
+        "address": "Юнтоловский проспект, 45к2",
+        "full-address": "Россия, Санкт-Петербург, Юнтоловский проспект, 45к2",
+        "latitude": "60.031256",
+        "longitude": "30.138675",
         "uid": "1074669391"
+      }
+    },
+    {
+      "id": "2",
+      "type": "buildings",
+      "attributes": {
+        "address": "Юнтоловский проспект, 47к3",
+        "full-address": "Россия, Санкт-Петербург, Юнтоловский проспект, 47к3",
+        "latitude": "60.030946",
+        "longitude": "30.141586",
+        "uid": "1074669392"
+      }
+    },
+    {
+      "id": "2",
+      "type": "buildings",
+      "attributes": {
+        "address": "Юнтоловский проспект, 51к1",
+        "full-address": "Россия, Санкт-Петербург, Юнтоловский проспект, 51к1",
+        "latitude": "60.033283",
+        "longitude": "30.143239",
+        "uid": "1074669393"
       }
     }
   ]
