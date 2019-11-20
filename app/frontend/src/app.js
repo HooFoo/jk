@@ -20,7 +20,17 @@ const theme = createMuiTheme({
     //   '"Lato"',
     //   'sans-serif'
     // ].join(',')
-  }
+  },
+  overrides: {
+    // Style sheet name ⚛️
+    MuiSelect: {
+      // Name of the rule
+      root: {
+        // Some CSS
+        color: blue[900],
+      },
+    },
+  },
 });
 
 class App extends Component {

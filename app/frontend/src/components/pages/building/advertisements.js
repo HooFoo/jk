@@ -5,12 +5,20 @@ import { withStyles } from '@material-ui/styles';
 import { Container, Typography } from '@material-ui/core';
 
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+
+import {
+  GridList,
+  GridListTile,
+  GridListTileBar,
+  Paper,
+  InputLabel,
+  Select,
+  Input,
+  MenuItem,
+  FormControl
+} from '@material-ui/core';
 
 import inject from '../../../helpers/inject';
 import AdvertisementRepository from '../../../repositories/advertisements-repository';
@@ -46,10 +54,28 @@ class Advertisements extends Component {
 
     return (
       <div className={classes.root}>
+        <Paper className={classes.filters}>
+
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="category">Категория</InputLabel>
+            <Select
+              id="category"
+              value={1}
+              className={classes.category}
+            >
+              <MenuItem value={1}>Категория 1</MenuItem>
+              <MenuItem value={2}>Категория 2</MenuItem>
+              <MenuItem value={3}>Категория 3</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="search">Поиск по объявлениям</InputLabel>
+            <Input id="search" value={""} />
+          </FormControl>
+        </Paper>
+
         <GridList cellHeight={180} className={classes.gridList}>
-          <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
-            <ListSubheader component="div">December</ListSubheader>
-          </GridListTile>
           {advertisements.map((tile, index) => (
             <GridListTile key={index}>
               <img src={tile.img} alt={tile.title} />
@@ -75,10 +101,23 @@ class Advertisements extends Component {
 
 const useStyles = (theme) => ({
     root: {
-      height: 'calc(100vh - 77px)',
-      overflow: 'auto',
+      
+    },
+    filters: {
+      'margin-bottom' : '10px',
+    },
+    textField: {
+      
+    },
+    category: {
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
     },
     gridList: {
+      height: 'calc(100vh - 77px)',
+      overflow: 'auto',
     },
     icon: {
       color: 'rgba(255, 255, 255, 0.54)',
