@@ -36,7 +36,7 @@ class Advertisements extends Component {
       this.setState({ advertisements: data, isFetching: false })
     }).catch(error => {
       console.log(error);
-        this.setState({...this.state, isFetching: false });
+      this.setState({...this.state, isFetching: false });
     });
   }
 
