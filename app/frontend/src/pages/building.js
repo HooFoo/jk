@@ -49,7 +49,6 @@ class BuildingPage extends Component {
     return (<Fragment>
 
       <Container maxWidth="md" className={classes.content}>
-        <Typography variant="h5">Building Page: {uid}</Typography>
         { value == "advertisements" &&
           <Advertisements uid={uid} />
         }

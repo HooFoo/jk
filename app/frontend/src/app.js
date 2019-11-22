@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles'
-import { blue, grey } from '@material-ui/core/colors'
+import { blue, grey, deepOrange } from '@material-ui/core/colors'
 
 import Routes from './routes'
 
 const theme = createMuiTheme({
   palette: {
-    secondary: {
-      main: blue[900]
-    },
     primary: {
       main: grey[300]
-    }
+    },
+    secondary: {
+      main: deepOrange[500]
+    },
   },
   typography: {
     // // Use the system font instead of the default Roboto font.
@@ -27,7 +27,7 @@ const theme = createMuiTheme({
       // Name of the rule
       root: {
         // Some CSS
-        color: blue[900],
+        color: deepOrange[500],
       },
     },
   },
@@ -36,9 +36,11 @@ const theme = createMuiTheme({
 class App extends Component {
   render() {
     return (
+      <div>
         <ThemeProvider theme={theme}>
           <Routes />
         </ThemeProvider>
+      </div>
     );
   }
 }

@@ -2,13 +2,13 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { Container, Typography } from '@material-ui/core';
-
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import AddIcon from '@material-ui/icons/Add';
 
 import {
+  Typography,
+  Box,
   GridList,
   GridListTile,
   GridListTileBar,
@@ -17,7 +17,12 @@ import {
   Select,
   Input,
   MenuItem,
-  FormControl
+  FormControl,
+  TextField,
+  Button,
+  Fab,
+  IconButton,
+  Tooltip
 } from '@material-ui/core';
 
 import inject from '../../../helpers/inject';
@@ -56,6 +61,10 @@ class Advertisements extends Component {
       <div className={classes.root}>
         <Paper className={classes.filters}>
 
+          <Box fontFamily="fontFamily" className={classes.title}>
+            <Typography variant="h5">Объявления</Typography>
+          </Box>
+
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="category">Категория</InputLabel>
             <Select
@@ -70,8 +79,7 @@ class Advertisements extends Component {
           </FormControl>
 
           <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="search">Поиск по объявлениям</InputLabel>
-            <Input id="search" value={""} />
+            <TextField id="standard-secondary" label="Поиск по объявлениям" color="secondary" fullWidth={true} />
           </FormControl>
         </Paper>
 
@@ -94,6 +102,13 @@ class Advertisements extends Component {
             <p>Загрузка...</p>
           }
         </GridList>
+        <div className={classes.addButtonContainer}>
+          <Tooltip title="Добавить объявление" aria-label="add" placement="top">
+            <Fab color="secondary" aria-label="add" className={classes.addButton}>
+              <AddIcon />
+            </Fab>
+          </Tooltip>
+        </div>
       </div>
     );
   }
@@ -103,8 +118,22 @@ const useStyles = (theme) => ({
     root: {
       
     },
+    title: {
+
+    },
+    addButtonContainer: {
+      position: 'relative'
+    },
+    addButton: {
+      display: 'flex',
+      position: 'absolute',
+      'z-index': 1050,
+      right: '37px',
+      bottom: '15px'
+    },
     filters: {
-      'margin-bottom' : '10px',
+      margin: '10px 0',
+      padding: '6px 10px',
     },
     textField: {
       
@@ -116,8 +145,9 @@ const useStyles = (theme) => ({
       minWidth: 120,
     },
     gridList: {
-      height: 'calc(100vh - 77px)',
+      height: 'calc(100vh - 185px)',
       overflow: 'auto',
+      margin: [[0], '!important']
     },
     icon: {
       color: 'rgba(255, 255, 255, 0.54)',

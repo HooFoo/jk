@@ -41,6 +41,7 @@ const useStyles = (theme) => ({
   appBar: {
     top: 'auto',
     bottom: 0,
+    height: '60px',
   },
   grow: {
     flexGrow: 0.5,
