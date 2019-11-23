@@ -40,6 +40,12 @@ class Advertisements extends Component {
     advertisements: []
   }
 
+  constructor(props) {
+    super(props);
+
+    this.onAddClick = this.onAddClick.bind(this);
+  }
+
   componentDidMount() {
     this.fetchAdvertisements();
   }
@@ -51,6 +57,11 @@ class Advertisements extends Component {
       console.log(error);
       this.setState({...this.state, isFetching: false });
     });
+  }
+
+  onAddClick() {
+    const { uid, history } = this.props;
+    return history.push(`/building/${uid}/advertisement-add`)
   }
 
   render() {
@@ -104,7 +115,7 @@ class Advertisements extends Component {
         </GridList>
         <div className={classes.addButtonContainer}>
           <Tooltip title="Добавить объявление" aria-label="add" placement="top">
-            <Fab color="secondary" aria-label="add" className={classes.addButton}>
+            <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={this.onAddClick}>
               <AddIcon />
             </Fab>
           </Tooltip>
@@ -145,7 +156,7 @@ const useStyles = (theme) => ({
       minWidth: 120,
     },
     gridList: {
-      height: 'calc(100vh - 185px)',
+      height: 'calc(100vh - 187px)',
       overflow: 'auto',
       margin: [[0], '!important']
     },
