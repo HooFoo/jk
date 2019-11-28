@@ -67,6 +67,9 @@ const mockedUrls = {
   "/api/v1/buildings/1074669391/advertisements": "chat-advertisements.json",
   "/api/v1/buildings/1074669392/advertisements": "chat-advertisements.json",
   "/api/v1/buildings/1074669393/advertisements": "chat-advertisements.json",
+  "/api/v1/buildings/1074669391/categories": "chat-categories.json",
+  "/api/v1/buildings/1074669392/categories": "chat-categories.json",
+  "/api/v1/buildings/1074669393/categories": "chat-categories.json",
 };
 
 function execute(url, action) {

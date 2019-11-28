@@ -9,7 +9,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 1,
         "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
       }
     },
@@ -22,7 +22,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 2,
         "img": "https://material-ui.com/static/images/grid-list/camera.jpg"
       }
     },
@@ -35,7 +35,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 3,
         "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
       }
     },
@@ -48,7 +48,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 4,
         "img": "https://material-ui.com/static/images/grid-list/camera.jpg"
       }
     },
@@ -61,7 +61,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 1,
         "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
       }
     },
@@ -74,7 +74,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 2,
         "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
       }
     },
@@ -87,7 +87,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 2,
         "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
       }
     },
@@ -100,7 +100,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 4,
         "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
       }
     },
@@ -113,7 +113,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 1,
         "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
       }
     },
@@ -126,7 +126,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 3,
         "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
       }
     },
@@ -139,7 +139,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 2,
         "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
       }
     },
@@ -152,7 +152,7 @@
         "price": 1000,
         "currency": "RUB",
         "due-in": "2019-10-22T06:15:20.791Z",
-        "category": null,
+        "category": 1,
         "img": "https://material-ui.com/static/images/grid-list/breakfast.jpg"
       }
     }

@@ -23,6 +23,7 @@ import NumberFormat from 'react-number-format';
 
 import inject from "../helpers/inject";
 import AdvertisementsRepository from '../repositories/advertisements-repository';
+import CategoryRepository from '../repositories/category-repository';
 
 import NavBar from '../components/shared/nav-bar';
 
@@ -91,6 +92,9 @@ class AdvertisementAddPage extends Component {
   state = { 
     price: 0,
     files: [],
+    categories: [],
+    categoryValue: "",
+    isFetching: true,
   }
 
   constructor(props) {
@@ -99,6 +103,21 @@ class AdvertisementAddPage extends Component {
     this.onSaveClick = this.onSaveClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onImagesDropZoneChange = this.onImagesDropZoneChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchCategories();
+  }
+
+  fetchCategories() {
+    const { match: { params: { uid } } } = this.props;
+
+    return this.props.categoryRepository.index(uid).then(data => {
+      this.setState({...this.state, categories: data, isFetching: false });
+    }).catch(error => {
+      console.log(error);
+      this.setState({...this.state, isFetching: false });
+    });
   }
 
   onSaveClick(event){
@@ -121,7 +140,7 @@ class AdvertisementAddPage extends Component {
   render() {
     const { classes } = this.props;
     const { match: { params: { uid } } } = this.props;
-    const { price, files } = this.state;
+    const { price, files, categories, isFetching } = this.state;
 
     return (<Fragment>
       <NavBar>
@@ -137,12 +156,13 @@ class AdvertisementAddPage extends Component {
             <InputLabel htmlFor="category">Категория</InputLabel>
             <Select
               id="category"
-              value={1}
               className={classes.category}
+              value={this.state.categoryValue}
+              onChange={this.handleChange('categoryValue')}
             >
-              <MenuItem value={1}>Категория 1</MenuItem>
-              <MenuItem value={2}>Категория 2</MenuItem>
-              <MenuItem value={3}>Категория 3</MenuItem>
+              {categories.map((x, index) => (
+                <MenuItem key={index} value={x.id}>{x.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 
@@ -197,7 +217,7 @@ class AdvertisementAddPage extends Component {
           </FormControl>
 
           <FormControl className={`${classes.formControl} ${classes.formButtons}`}>
-            <Button variant="outlined" color="secondary" onClick={this.onSaveClick}>
+            <Button variant="outlined" color="secondary" onClick={this.onSaveClick} disabled={isFetching}>
               Добавить объявление
             </Button>
           </FormControl>
@@ -222,7 +242,7 @@ const useStyles = (theme) => ({
     'margin-top': 0,
   },
   price: {
-    'margin-top': '13px',
+    'margin-top': '13px !important',
     '& .MuiInputLabel-formControl': {
       top: '2px',
       left: '2px',
@@ -264,6 +284,7 @@ const useStyles = (theme) => ({
 
 const dependencies = {
   advertisementsRepository: AdvertisementsRepository,
+  categoryRepository: CategoryRepository,
 };
 
 export default withStyles(useStyles)(inject(dependencies, AdvertisementAddPage));

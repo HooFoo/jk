@@ -27,32 +27,47 @@ import {
 
 import inject from '../../../helpers/inject';
 import AdvertisementRepository from '../../../repositories/advertisements-repository';
+import CategoryRepository from '../../../repositories/category-repository';
 
 class Advertisements extends Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
     advertisementsRepository: PropTypes.func.isRequired,
+    categoryRepository: PropTypes.func.isRequired,
     uid: PropTypes.string.isRequired
   }
 
   state = { 
     isFetching: true,
-    advertisements: []
+    advertisements: [],
+    categories: [],
+    categoryValue: "",
   }
 
   constructor(props) {
     super(props);
 
     this.onAddClick = this.onAddClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
-    this.fetchAdvertisements();
+    this.fetchCategories()
+      .then(() => this.fetchAdvertisements());
+  }
+
+  fetchCategories() {
+    return this.props.categoryRepository.index(this.props.uid).then(data => {
+      this.setState({...this.state, categories: data });
+    }).catch(error => {
+      console.log(error);
+      this.setState({...this.state, isFetching: false });
+    });
   }
 
   fetchAdvertisements() {
     this.props.advertisementsRepository.index(this.props.uid).then(data => {
-      this.setState({ advertisements: data, isFetching: false })
+      this.setState({...this.state, advertisements: data, isFetching: false })
     }).catch(error => {
       console.log(error);
       this.setState({...this.state, isFetching: false });
@@ -64,9 +79,18 @@ class Advertisements extends Component {
     return history.push(`/building/${uid}/advertisement-add`)
   }
 
+  handleChange(name) { 
+    return event => {
+      this.setState({
+        ...this.state,
+        [name]: event.target.value
+      });
+    };
+  }
+
   render() {
     const { classes, uid } = this.props;
-    const { isFetching, advertisements } = this.state;
+    const { isFetching, categories, advertisements } = this.state;
 
     return (
       <div className={classes.root}>
@@ -80,12 +104,13 @@ class Advertisements extends Component {
             <InputLabel htmlFor="category">Категория</InputLabel>
             <Select
               id="category"
-              value={1}
               className={classes.category}
+              value={this.state.categoryValue}
+              onChange={this.handleChange('categoryValue')}
             >
-              <MenuItem value={1}>Категория 1</MenuItem>
-              <MenuItem value={2}>Категория 2</MenuItem>
-              <MenuItem value={3}>Категория 3</MenuItem>
+              {categories.map((x, index) => (
+                <MenuItem key={index} value={x.id}>{x.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 
@@ -100,7 +125,7 @@ class Advertisements extends Component {
               <img src={tile.img} alt={tile.title} />
               <GridListTileBar
                 title={tile.title}
-                subtitle={<span>by: {tile.description}</span>}
+                subtitle={<span>{categories.find(x => x.id == tile.category).name}</span>}
                 actionIcon={
                   <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
                     <InfoIcon />
@@ -166,7 +191,8 @@ const useStyles = (theme) => ({
   });
 
 const dependencies = {
-  advertisementsRepository: AdvertisementRepository
+  advertisementsRepository: AdvertisementRepository,
+  categoryRepository: CategoryRepository,
 };
 
 export default withStyles(useStyles)(inject(dependencies, Advertisements));
