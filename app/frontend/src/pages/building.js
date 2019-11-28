@@ -15,7 +15,7 @@ import AdvertisementsRepository from '../repositories/advertisements-repository'
 import BuildingRepository from '../repositories/building-repository';
 
 import Advertisements from '../components/pages/building/advertisements';
-import BottomBar from '../components/shared/bottom-bar';
+import NavBar from '../components/shared/nav-bar';
 
 class BuildingPage extends Component {
   static propTypes = {
@@ -42,20 +42,12 @@ class BuildingPage extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, history } = this.props;
     const { match: { params: { uid } } } = this.props;
     const { value } = this.state;
 
     return (<Fragment>
-
-      <Container maxWidth="md" className={classes.content}>
-        <Typography variant="h5">Building Page: {uid}</Typography>
-        { value == "advertisements" &&
-          <Advertisements uid={uid} />
-        }
-      </Container>
-
-      <BottomBar>
+      <NavBar>
         <Tabs
             value={value}
             onChange={this.handleChange}
@@ -68,7 +60,12 @@ class BuildingPage extends Component {
           <Tab icon={<ChatTwoToneIcon />} value="chat" />
           <Tab icon={<AddShoppingCartTwoToneIcon />} value="advertisements" />
         </Tabs>
-      </BottomBar>
+      </NavBar>
+      <Container maxWidth="md" className={classes.content}>
+        { value == "advertisements" &&
+          <Advertisements uid={uid} history={history} />
+        }
+      </Container>
     </Fragment>);
   }
 }
@@ -79,13 +76,6 @@ const useStyles = () => ({
   },
   content: {
     padding: 0,
-  },
-  bottomNavigation: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    margin: '0 auto',
-    width: '400px',
   }
 });
 

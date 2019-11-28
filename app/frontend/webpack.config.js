@@ -10,6 +10,7 @@ module.exports = (env) => {
   }, {});
 
   return {
+    entry: ['@babel/polyfill', './src/index.js'],
     devtool: "source-map",
 
     module: {

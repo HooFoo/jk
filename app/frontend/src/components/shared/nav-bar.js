@@ -11,7 +11,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import SearchIcon from '@material-ui/icons/Search';
 
-class BottomBar extends Component {
+class NavBar extends Component {
 
   render() {
     const { classes, children } = this.props;
@@ -39,12 +39,12 @@ class BottomBar extends Component {
 
 const useStyles = (theme) => ({
   appBar: {
-    top: 'auto',
-    bottom: 0,
+    position: 'relative',
+    height: '60px',
   },
   grow: {
     flexGrow: 0.5,
   },
 });
 
-export default withStyles(useStyles)(BottomBar);
+export default withStyles(useStyles)(NavBar);
