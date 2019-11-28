@@ -27,9 +27,20 @@ const theme = createMuiTheme({
       // Name of the rule
       root: {
         // Some CSS
+        //color: deepOrange[500],
+      },
+    },
+    MuiInputLabel: {
+      root: {
         color: deepOrange[500],
       },
     },
+    MuiInputAdornment: {
+      root: {
+        color: deepOrange[500],
+      },
+    },
+
   },
 });
 

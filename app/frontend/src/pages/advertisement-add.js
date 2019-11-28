@@ -12,12 +12,14 @@ import {
   MenuItem,
   FormControl,
   TextField,
+  Button,
+  FilledInput,
+  InputAdornment,
 } from '@material-ui/core';
 
 import { DropzoneArea } from 'material-ui-dropzone'
-
-import ChatTwoToneIcon from '@material-ui/icons/ChatTwoTone';
-import AddShoppingCartTwoToneIcon from '@material-ui/icons/AddShoppingCartTwoTone';
+import MaskedInput from 'react-text-mask';
+import NumberFormat from 'react-number-format';
 
 import inject from "../helpers/inject";
 import AdvertisementsRepository from '../repositories/advertisements-repository';
@@ -48,24 +50,69 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
+function TextMaskCustom(props) {
+  const { inputRef, ...other } = props;
+
+  return (
+    <MaskedInput
+      {...other}
+      ref={ref => {
+        inputRef(ref ? ref.inputElement : null);
+      }}
+      mask={['+', /[1-9]/, '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+      placeholderChar={'\u2000'}
+      showMask
+    />
+  );
+}
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={values => {
+        onChange({
+          target: {
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+    />
+  );
+}
+
 class AdvertisementAddPage extends Component {
 
   state = { 
-    value: "advertisements",
+    price: 0,
     files: [],
   }
 
   constructor(props) {
     super(props);
 
+    this.onSaveClick = this.onSaveClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
-
     this.onImagesDropZoneChange = this.onImagesDropZoneChange.bind(this);
   }
 
-  handleChange(event){
+  onSaveClick(event){
 
   };
+
+  handleChange(name) { 
+    return event => {
+      this.setState({
+        ...this.state,
+        [name]: event.target.value
+      });
+    };
+  }
 
   onImagesDropZoneChange(files) {
     this.setState({...this.state, files: files });
@@ -74,7 +121,7 @@ class AdvertisementAddPage extends Component {
   render() {
     const { classes } = this.props;
     const { match: { params: { uid } } } = this.props;
-    const { value } = this.state;
+    const { price, files } = this.state;
 
     return (<Fragment>
       <NavBar>
@@ -99,9 +146,8 @@ class AdvertisementAddPage extends Component {
             </Select>
           </FormControl>
 
-          <FormControl className={`${classes.formControl}`}>
+          <FormControl className={classes.formControl}>
             <CssTextField
-              id="outlined-multiline-static"
               label="Заголовок"
               fullWidth={true}
               className={classes.title}
@@ -110,9 +156,8 @@ class AdvertisementAddPage extends Component {
             />
           </FormControl>
 
-          <FormControl className={`${classes.formControl}`}>
+          <FormControl className={classes.formControl}>
             <CssTextField
-              id="outlined-multiline-static"
               label="Описание"
               multiline
               rows="6"
@@ -123,7 +168,7 @@ class AdvertisementAddPage extends Component {
             />
           </FormControl>
 
-          <FormControl className={`${classes.formControl}`}>
+          <FormControl className={classes.formControl}>
             <DropzoneArea
               dropzoneClass={classes.dropzoneClass}
               onChange={this.onImagesDropZoneChange.bind(this)}
@@ -140,6 +185,22 @@ class AdvertisementAddPage extends Component {
             />
           </FormControl>
 
+          <FormControl className={`${classes.formControl} ${classes.price}`}>
+            <InputLabel htmlFor="filled-adornment-amount">Цена</InputLabel>
+            <FilledInput
+              id="filled-adornment-amount"
+              value={price}
+              startAdornment={<InputAdornment position="start">₽</InputAdornment>}
+              inputComponent={NumberFormatCustom}
+              onChange={this.handleChange('price')}
+            />
+          </FormControl>
+
+          <FormControl className={`${classes.formControl} ${classes.formButtons}`}>
+            <Button variant="outlined" color="secondary" onClick={this.onSaveClick}>
+              Добавить объявление
+            </Button>
+          </FormControl>
         </Paper>
       </Container>
     </Fragment>);
@@ -157,9 +218,24 @@ const useStyles = (theme) => ({
   title: {
 
   },
+  description: {
+    'margin-top': 0,
+  },
+  price: {
+    'margin-top': '13px',
+    '& .MuiInputLabel-formControl': {
+      top: '2px',
+      left: '2px',
+    },
+    '& .MuiInputAdornment-root': {
+      'margin-top': '11px',
+    },
+    '& .MuiFilledInput-input': {
+      padding: '20px 0px 10px',
+    }
+  },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: '240px',
     display: 'block',
   },
   category: {
@@ -181,6 +257,9 @@ const useStyles = (theme) => ({
       right: '6px',
     }
   },
+  formButtons: {
+    'margin-top': '14px',
+  }
 });
 
 const dependencies = {
