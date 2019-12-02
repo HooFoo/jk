@@ -4,6 +4,8 @@ module Api
   module V1
     module Buildings
       class AdvertisementsController < Api::V1::Buildings::BaseController
+        before_action :authenticate_user!, only: %i[create update destroy]
+
         def index
           form = Advertisements::IndexForm.new params
           ads = building.advertisements.where form.params

@@ -9,10 +9,12 @@ Rails.application.routes.draw do
           resources :advertisements
         end
       end
+
+      mount_devise_token_auth_for 'User', at: 'auth'
     end
   end
 
-  devise_for :users
+
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
 end

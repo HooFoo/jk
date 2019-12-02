@@ -7,7 +7,7 @@ module Api
         private
 
         def building
-          @building = Building.find params[:building_id]
+          @building = Building.find_by uid: params[:building_id]
         end
       end
     end
