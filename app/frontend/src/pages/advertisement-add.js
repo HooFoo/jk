@@ -60,7 +60,7 @@ function TextMaskCustom(props) {
       ref={ref => {
         inputRef(ref ? ref.inputElement : null);
       }}
-      mask={['+', /[1-9]/, '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+      mask={['+', /[1-9]/, ' ', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
       placeholderChar={'\u2000'}
       showMask
     />
@@ -90,7 +90,10 @@ function NumberFormatCustom(props) {
 class AdvertisementAddPage extends Component {
 
   state = { 
+    title: '',
+    description: '',
     price: 0,
+    phone: '+7',
     files: [],
     categories: [],
     categoryValue: "",
@@ -121,7 +124,18 @@ class AdvertisementAddPage extends Component {
   }
 
   onSaveClick(event){
-
+    const { history, match: { params: { uid } } } = this.props;
+    this.props.advertisementsRepository.create(uid, {
+      title: this.state.title,
+      description: this.state.description,
+      phone: this.state.phone,
+      files: this.state.files,
+      categoryValue: this.state.categoryValue,
+    }).then(() => {
+      return history.push(`/building/${uid}`);
+    }).catch(error => {
+      this.setState({...this.state, error: error && error.message ? error.message : "Ошибка сохранения."});
+    });
   };
 
   handleChange(name) { 
@@ -140,7 +154,6 @@ class AdvertisementAddPage extends Component {
   render() {
     const { classes } = this.props;
     const { match: { params: { uid } } } = this.props;
-    const { price, files, categories, isFetching } = this.state;
 
     return (<Fragment>
       <NavBar>
@@ -160,7 +173,7 @@ class AdvertisementAddPage extends Component {
               value={this.state.categoryValue}
               onChange={this.handleChange('categoryValue')}
             >
-              {categories.map((x, index) => (
+              {this.state.categories.map((x, index) => (
                 <MenuItem key={index} value={x.id}>{x.name}</MenuItem>
               ))}
             </Select>
@@ -168,9 +181,12 @@ class AdvertisementAddPage extends Component {
 
           <FormControl className={classes.formControl}>
             <CssTextField
+              id="title"
               label="Заголовок"
               fullWidth={true}
               className={classes.title}
+              value={this.state.title}
+              onChange={this.handleChange('title')}
               margin="normal"
               variant="outlined"
             />
@@ -178,11 +194,14 @@ class AdvertisementAddPage extends Component {
 
           <FormControl className={classes.formControl}>
             <CssTextField
+              id="description"
               label="Описание"
               multiline
               rows="6"
               fullWidth={true}
               className={classes.description}
+              value={this.state.description}
+              onChange={this.handleChange('description')}
               margin="normal"
               variant="outlined"
             />
@@ -206,18 +225,28 @@ class AdvertisementAddPage extends Component {
           </FormControl>
 
           <FormControl className={`${classes.formControl} ${classes.price}`}>
-            <InputLabel htmlFor="filled-adornment-amount">Цена</InputLabel>
+            <InputLabel htmlFor="filled-adornment-price">Цена</InputLabel>
             <FilledInput
-              id="filled-adornment-amount"
-              value={price}
+              id="filled-adornment-price"
+              value={this.state.price}
               startAdornment={<InputAdornment position="start">₽</InputAdornment>}
               inputComponent={NumberFormatCustom}
               onChange={this.handleChange('price')}
             />
           </FormControl>
 
+          <FormControl className={`${classes.formControl} ${classes.phone}`}>
+            <InputLabel htmlFor="filled-adornment-phone">Телефон для связи</InputLabel>
+            <FilledInput
+              id="filled-adornment-phone"
+              value={this.state.phone}
+              inputComponent={TextMaskCustom}
+              onChange={this.handleChange('phone')}
+            />
+          </FormControl>
+
           <FormControl className={`${classes.formControl} ${classes.formButtons}`}>
-            <Button variant="outlined" color="secondary" onClick={this.onSaveClick} disabled={isFetching}>
+            <Button variant="outlined" color="secondary" onClick={this.onSaveClick} disabled={this.state.isFetching}>
               Добавить объявление
             </Button>
           </FormControl>
@@ -236,7 +265,7 @@ const useStyles = (theme) => ({
     padding: '10px',
   },
   title: {
-
+    'margin-top': '8px',
   },
   description: {
     'margin-top': 0,
@@ -252,6 +281,16 @@ const useStyles = (theme) => ({
     },
     '& .MuiFilledInput-input': {
       padding: '20px 0px 10px',
+    }
+  },
+  phone: {
+    '& .MuiInputLabel-formControl': {
+      top: '2px',
+      left: '2px',
+    },
+    '& .MuiFilledInput-input': {
+      width: '201px',
+      padding: '20px 0px 10px 12px',
     }
   },
   formControl: {
