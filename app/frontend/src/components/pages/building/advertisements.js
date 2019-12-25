@@ -22,7 +22,8 @@ import {
   Button,
   Fab,
   IconButton,
-  Tooltip
+  Tooltip,
+  Zoom
 } from '@material-ui/core';
 
 import inject from '../../../helpers/inject';
@@ -88,6 +89,19 @@ class Advertisements extends Component {
     };
   }
 
+  getCurrencySymbol = (currency) => {
+    switch(currency){
+      case 'RUB':
+        return '₽';
+      case 'USD':
+        return '$';
+      case 'EUR':
+        return '€';
+      default:
+        return 'unknown currency';
+    }
+  }
+
   render() {
     const { classes, uid } = this.props;
     const { isFetching, categories, advertisements } = this.state;
@@ -122,14 +136,25 @@ class Advertisements extends Component {
         <GridList cellHeight={180} className={classes.gridList}>
           {advertisements.map((tile, index) => (
             <GridListTile key={index}>
+              
               <img src={tile.img} alt={tile.title} />
               <GridListTileBar
                 title={tile.title}
                 subtitle={<span>{categories.find(x => x.id == tile.category).name}</span>}
                 actionIcon={
-                  <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
-                    <InfoIcon />
-                  </IconButton>
+                  <React.Fragment>
+                    <Tooltip 
+                      disableFocusListener
+                      className={classes.descriptionTooltip}
+                      title={tile.description}
+                      placement="left"
+                      TransitionComponent={Zoom}>
+                      <IconButton className={classes.icon}>
+                        <InfoIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Typography className={classes.price} variant="h5">{tile.price} {this.getCurrencySymbol(tile.currency)}</Typography>
+                  </React.Fragment>
                 }
               />
             </GridListTile>
@@ -187,7 +212,13 @@ const useStyles = (theme) => ({
     },
     icon: {
       color: 'rgba(255, 255, 255, 0.54)',
+      padding: '0px 10px 6px 10px;',
     },
+    price: {
+      color: '#ffffff',
+      display: 'inline-block',
+      'margin-right': '10px',
+    }
   });
 
 const dependencies = {

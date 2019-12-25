@@ -40,7 +40,15 @@ const theme = createMuiTheme({
         color: deepOrange[500],
       },
     },
-
+    MuiTooltip: {
+      tooltip: {
+        fontSize: "0.8em",
+        'text-overflow': 'ellipsis',
+        'overflow': 'hidden',
+        'max-width': '200px',
+        'white-space': 'nowrap',
+      }
+    }
   },
 });
 
