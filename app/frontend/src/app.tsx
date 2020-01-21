@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles'
-import { blue, grey, deepOrange } from '@material-ui/core/colors'
+import { grey, deepOrange } from '@material-ui/core/colors';
 
-import Routes from './routes'
+import { Routes } from './routes';
 
 const theme = createMuiTheme({
   palette: {
@@ -52,7 +52,7 @@ const theme = createMuiTheme({
   },
 });
 
-class App extends Component {
+export class App extends React.Component {
   render() {
     return (
       <div>
@@ -63,5 +63,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;
