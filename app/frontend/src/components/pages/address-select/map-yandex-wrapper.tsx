@@ -1,34 +1,48 @@
-import React, { Component } from "react";
-import PropTypes from 'prop-types';
-import { withStyles } from "@material-ui/styles";
+import * as React from "react";
+import { withStyles, createStyles } from "@material-ui/styles";
 import inject from "../../../helpers/inject";
 
 import BuildingRepository from "../../../repositories/building-repository";
+import Building from "../../../models/building";
+import { WithStyles, Theme } from "@material-ui/core";
 
-class MapYandexWrapper extends Component {
-  static propTypes = {
-    classes: PropTypes.object,
-    buildingsRepository: PropTypes.func.isRequired,
+interface IProps extends WithStyles<typeof styles> {
+  onAddressSelect: (address: string, uid: string) => void;
+}
 
-    onAddressSelect: PropTypes.func.isRequired
-  };
+interface IState {
+  hasLocation: boolean,
+  latlng: {
+    lat: any,
+    lng: any,
+  },
+  buildings: Building[],
+  newChatPlacemark: any,
+  newChatAttributes: any,
+}
 
-  state = {
-    hasLocation: false,
-    latlng: {
-      lat: 59.95,
-      lng: 30.31,
-    },
-    buildings: [],
-    newChatPlacemark: null,
-    newChatAttributes: null,
-  };
+class MapYandexWrapper extends React.Component<IProps, IState> {
 
-  map;
+  constructor(props: IProps) {
+    super(props);
 
-  existingChatPlacemark(building) {
+    this.state = {
+      hasLocation: false,
+      latlng: {
+        lat: 59.95,
+        lng: 30.31,
+      },
+      buildings: [],
+      newChatPlacemark: null,
+      newChatAttributes: null,
+    };
+  }
+
+  private map: any;
+
+  existingChatPlacemark(building: Building) {
     const { onAddressSelect } = this.props;
-    const { ymaps } = window;
+    const { ymaps } = window as any;
 
     const placemark = new ymaps.Placemark(building.location(), {
       balloonContentBody: `<p>${building.address}</p> `
@@ -49,7 +63,7 @@ class MapYandexWrapper extends Component {
   }
 
   setupMap() {
-    const { ymaps } = window;
+    const { ymaps } = window as any;
     const mapParams = {
       center: [59.95, 30.31],
       zoom: 6,
@@ -61,13 +75,12 @@ class MapYandexWrapper extends Component {
       this.setCenterLocation();
       this.setupSearchControl();
       this.addBoundsChangeEvent();
-      this.map.events.add('click', (e) => { this.setChatPlacemark(e.get('coords')); });
+      this.map.events.add('click', (e: any) => { this.setChatPlacemark(e.get('coords')); });
     })
   }
 
   addBoundsChangeEvent() {
-    const { buildingsRepository } = this.props;
-    this.map.events.add('boundschange', (e) => {
+    this.map.events.add('boundschange', (e: any) => {
       const bounds = e.originalEvent.newBounds;
 
       const boundary = {
@@ -77,7 +90,7 @@ class MapYandexWrapper extends Component {
         ne_lng: bounds[1][1],
       };
 
-      buildingsRepository.index(boundary).then((buildings) => {
+      BuildingRepository.index(boundary).then((buildings) => {
         this.setState({ buildings });
 
         buildings.map((building)=>{
@@ -89,7 +102,7 @@ class MapYandexWrapper extends Component {
   }
 
   setupSearchControl() {
-    const { ymaps } = window;
+    const { ymaps } = window as any;
 
     const searchControl = new ymaps.control.SearchControl({
       options: {
@@ -103,7 +116,7 @@ class MapYandexWrapper extends Component {
       }
     });
 
-    searchControl.events.add('resultselect', function (e) {
+    searchControl.events.add('resultselect', (e: any) => {
       this.onResultSelect(e, searchControl);
     }, this);
 
@@ -111,19 +124,19 @@ class MapYandexWrapper extends Component {
   }
 
   setCenterLocation() {
-    const { ymaps } = window;
+    const { ymaps } = window as any;
 
     ymaps.geolocation.get({
       mapStateAutoApply: true,
       autoReverseGeocode: true
     })
-      .then((result) => {
-        this.map.geoObjects.add(result.geoObjects);
-        this.map.setCenter(result.geoObjects.position);
-      });
+    .then((result: any) => {
+      this.map.geoObjects.add(result.geoObjects);
+      this.map.setCenter(result.geoObjects.position);
+    });
   }
 
-  onResultSelect(event, searchControl) {
+  onResultSelect(event: any, searchControl: any) {
     const index = searchControl.getSelectedIndex();
     const results = searchControl.getResultsArray();
 
@@ -134,7 +147,7 @@ class MapYandexWrapper extends Component {
   }
 
 
-  setChatPlacemark = (coords) => {
+  setChatPlacemark(coords: any) {
     let { newChatPlacemark } = this.state;
 
     if (newChatPlacemark) {
@@ -154,8 +167,8 @@ class MapYandexWrapper extends Component {
     this.getAddress(coords);
   };
 
-  createPlacemark(coords) {
-    const { ymaps } = window;
+  createPlacemark(coords: any) {
+    const { ymaps } = window as any;
 
     return new ymaps.Placemark(coords, {
       iconCaption: 'поиск...'
@@ -166,8 +179,8 @@ class MapYandexWrapper extends Component {
   }
 
   // Определяем адрес по координатам (обратное геокодирование).
-  getAddress(coords) {
-    const { ymaps } = window;
+  getAddress(coords: any) {
+    const { ymaps } = window as any;
     const { newChatPlacemark }  = this.state;
     const { onAddressSelect } = this.props;
 
@@ -176,7 +189,7 @@ class MapYandexWrapper extends Component {
     newChatPlacemark.properties.set('iconCaption', 'поиск...');
     ymaps.geocode(coords, {
       kind: "house"
-    }).then((res) => {
+    }).then((res: any) => {
       var firstGeoObject = res.geoObjects.get(0);
 
       if (!firstGeoObject) {
@@ -191,7 +204,7 @@ class MapYandexWrapper extends Component {
 
       const address = firstGeoObject.getAddressLine();
 
-      onAddressSelect(address);
+      onAddressSelect(address, "");
 
       const coordinates = firstGeoObject.geometry.getCoordinates();
 
@@ -217,7 +230,7 @@ class MapYandexWrapper extends Component {
   }
 }
 
-const useStyles = () => ({
+const styles = (theme: Theme) => createStyles({
   mapContainer: {
     height: "50vh",
     width: '100%',
@@ -225,9 +238,4 @@ const useStyles = () => ({
   },
 });
 
-
-const dependencies = {
-  buildingsRepository: BuildingRepository
-};
-
-export default withStyles(useStyles)(inject(dependencies, MapYandexWrapper));
+export default withStyles(styles)(MapYandexWrapper);
