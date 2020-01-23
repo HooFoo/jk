@@ -4,7 +4,7 @@ import Building from "../models/building";
 export default class AddressRepository {
   static baseUrl = '/api/v1/address';
 
-  static index(address = '') {
+  static index(address = ''): Promise<Building> {
     return http.get(this.baseUrl, { address })
       .then((response) => {
         return new Building(response.attributes);

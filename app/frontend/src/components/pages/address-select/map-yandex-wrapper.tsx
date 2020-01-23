@@ -1,6 +1,5 @@
 import * as React from "react";
 import { withStyles, createStyles } from "@material-ui/styles";
-import inject from "../../../helpers/inject";
 
 import BuildingRepository from "../../../repositories/building-repository";
 import Building from "../../../models/building";

@@ -1,6 +1,7 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/styles';
+import * as React from 'react';
+import * as H from 'history';
+
+import { withStyles, WithStyles } from '@material-ui/styles';
 
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
@@ -26,27 +27,35 @@ import {
   Zoom
 } from '@material-ui/core';
 
-import inject from '../../../helpers/inject';
 import AdvertisementRepository from '../../../repositories/advertisements-repository';
 import CategoryRepository from '../../../repositories/category-repository';
+import Advertisement from '../../../models/advertisement';
+import Category from '../../../models/category';
 
-class Advertisements extends Component {
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-    advertisementsRepository: PropTypes.func.isRequired,
-    categoryRepository: PropTypes.func.isRequired,
-    uid: PropTypes.string.isRequired
-  }
 
-  state = { 
-    isFetching: true,
-    advertisements: [],
-    categories: [],
-    categoryValue: "",
-  }
+interface IProps extends WithStyles<typeof styles> {
+  uid: string,
+  history: H.History<H.LocationState>
+}
 
-  constructor(props) {
+interface IState {
+  isFetching: boolean,
+  advertisements: Advertisement[],
+  categories: Category[],
+  categoryValue: string,
+}
+
+class Advertisements extends React.Component<IProps, IState> {
+
+  constructor(props: IProps) {
     super(props);
+
+    this.state = { 
+      isFetching: true,
+      advertisements: [],
+      categories: [],
+      categoryValue: "",
+    }
 
     this.onAddClick = this.onAddClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -58,8 +67,11 @@ class Advertisements extends Component {
   }
 
   fetchCategories() {
-    return this.props.categoryRepository.index(this.props.uid).then(data => {
-      this.setState({...this.state, categories: data });
+    return CategoryRepository.index(this.props.uid).then(data => {
+      this.setState({
+        ...this.state,
+        categories: data
+      });
     }).catch(error => {
       console.log(error);
       this.setState({...this.state, isFetching: false });
@@ -67,8 +79,12 @@ class Advertisements extends Component {
   }
 
   fetchAdvertisements() {
-    this.props.advertisementsRepository.index(this.props.uid).then(data => {
-      this.setState({...this.state, advertisements: data, isFetching: false })
+    AdvertisementRepository.index(this.props.uid).then(data => {
+      this.setState({
+        ...this.state,
+        advertisements: data,
+        isFetching: false
+      })
     }).catch(error => {
       console.log(error);
       this.setState({...this.state, isFetching: false });
@@ -80,8 +96,8 @@ class Advertisements extends Component {
     return history.push(`/building/${uid}/advertisement-add`)
   }
 
-  handleChange(name) { 
-    return event => {
+  handleChange(name: any) { 
+    return (event: any) => {
       this.setState({
         ...this.state,
         [name]: event.target.value
@@ -89,7 +105,7 @@ class Advertisements extends Component {
     };
   }
 
-  getCurrencySymbol = (currency) => {
+  getCurrencySymbol = (currency: string) => {
     switch(currency){
       case 'RUB':
         return '₽';
@@ -140,12 +156,11 @@ class Advertisements extends Component {
               <img src={tile.img} alt={tile.title} />
               <GridListTileBar
                 title={tile.title}
-                subtitle={<span>{categories.find(x => x.id == tile.category).name}</span>}
+                subtitle={<span>{categories.find(x => x.id == tile.category)?.name}</span>}
                 actionIcon={
                   <React.Fragment>
                     <Tooltip 
                       disableFocusListener
-                      className={classes.descriptionTooltip}
                       title={tile.description}
                       placement="left"
                       TransitionComponent={Zoom}>
@@ -175,55 +190,50 @@ class Advertisements extends Component {
   }
 }
 
-const useStyles = (theme) => ({
-    root: {
-      
-    },
-    title: {
+const styles = (theme: Theme) => createStyles({
+  root: {
+    
+  },
+  title: {
 
-    },
-    addButtonContainer: {
-      position: 'relative'
-    },
-    addButton: {
-      display: 'flex',
-      position: 'absolute',
-      'z-index': 1050,
-      right: '37px',
-      bottom: '15px'
-    },
-    filters: {
-      margin: '10px 0',
-      padding: '6px 10px',
-    },
-    textField: {
-      
-    },
-    category: {
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    gridList: {
-      height: 'calc(100vh - 187px)',
-      overflow: 'auto',
-      margin: [[0], '!important']
-    },
-    icon: {
-      color: 'rgba(255, 255, 255, 0.54)',
-      padding: '0px 10px 6px 10px;',
-    },
-    price: {
-      color: '#ffffff',
-      display: 'inline-block',
-      'margin-right': '10px',
-    }
-  });
+  },
+  addButtonContainer: {
+    position: 'relative'
+  },
+  addButton: {
+    display: 'flex',
+    position: 'absolute',
+    'z-index': 1050,
+    right: '37px',
+    bottom: '15px'
+  },
+  filters: {
+    margin: '10px 0',
+    padding: '6px 10px',
+  },
+  textField: {
+    
+  },
+  category: {
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  gridList: {
+    height: 'calc(100vh - 188px)',
+    overflow: 'auto',
+    margin: '0!important',
+  },
+  icon: {
+    color: 'rgba(255, 255, 255, 0.54)',
+    padding: '0px 10px 6px 10px;',
+  },
+  price: {
+    color: '#ffffff',
+    display: 'inline-block',
+    'margin-right': '10px',
+  }
+});
 
-const dependencies = {
-  advertisementsRepository: AdvertisementRepository,
-  categoryRepository: CategoryRepository,
-};
-
-export default withStyles(useStyles)(inject(dependencies, Advertisements));
+export default withStyles(styles)(Advertisements);

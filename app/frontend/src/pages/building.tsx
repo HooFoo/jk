@@ -1,8 +1,9 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/styles';
+import * as React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 
-import { Container, Typography } from '@material-ui/core';
+import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
+
+import { Container, Theme } from '@material-ui/core';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -10,34 +11,29 @@ import Tab from '@material-ui/core/Tab';
 import ChatTwoToneIcon from '@material-ui/icons/ChatTwoTone';
 import AddShoppingCartTwoToneIcon from '@material-ui/icons/AddShoppingCartTwoTone';
 
-import inject from "../helpers/inject";
-import AdvertisementsRepository from '../repositories/advertisements-repository';
-import BuildingRepository from '../repositories/building-repository';
-
 import Advertisements from '../components/pages/building/advertisements';
 import NavBar from '../components/shared/nav-bar';
 
-class BuildingPage extends Component {
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.object.isRequired,
-    }),
-    advertisementsRepository: PropTypes.func.isRequired,
-    buildingsRepository: PropTypes.func.isRequired,
-  }
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
+}
 
-  state = { 
-    value: "advertisements",
-  }
+interface IState {
+  value: string
+}
 
-  constructor(props) {
+class BuildingPage extends React.Component<IProps, IState> {
+
+  constructor(props: IProps) {
     super(props);
+
+    this.state = {
+      value: "advertisements"
+    };
 
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(event, newValue) {
+  handleChange(event: any, newValue: string) {
     this.setState({ value: newValue });
   };
 
@@ -46,7 +42,7 @@ class BuildingPage extends Component {
     const { match: { params: { uid } } } = this.props;
     const { value } = this.state;
 
-    return (<Fragment>
+    return (<React.Fragment>
       <NavBar>
         <Tabs
             value={value}
@@ -66,11 +62,11 @@ class BuildingPage extends Component {
           <Advertisements uid={uid} history={history} />
         }
       </Container>
-    </Fragment>);
+    </React.Fragment>);
   }
 }
 
-const useStyles = () => ({
+const styles = (theme: Theme) => createStyles({
   root: {
     height: 'calc(100vh - 64px)',
   },
@@ -79,9 +75,4 @@ const useStyles = () => ({
   }
 });
 
-const dependencies = {
-  advertisementsRepository: AdvertisementsRepository,
-  buildingsRepository: BuildingRepository
-};
-
-export default withStyles(useStyles)(inject(dependencies, BuildingPage));
+export default withStyles(styles)(BuildingPage);
