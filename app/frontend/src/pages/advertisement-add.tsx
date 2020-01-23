@@ -17,7 +17,7 @@ import {
   Theme,
 } from '@material-ui/core';
 
-//import { DropzoneArea } from 'material-ui-dropzone'
+import { DropzoneArea } from 'material-ui-dropzone'
 import MaskedInput from 'react-text-mask';
 import NumberFormat from 'react-number-format';
 
@@ -224,20 +224,20 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
           </FormControl>
 
           <FormControl className={classes.formControl}>
-            {/* <DropzoneArea
+            <DropzoneArea
               dropzoneClass={classes.dropzoneClass}
               onChange={this.onImagesDropZoneChange.bind(this)}
               acceptedFiles={['image/*']}
               filesLimit={15}
               maxFileSize={50 * 1024 * 1024} // 50 MB
               dropzoneText="Выберите фотографии"
-              showFileNames={true}
+              //showFileNames={true}
               showFileNamesInPreview={true}
-              getFileLimitExceedMessage={(filesLimit) => `Максимальное количество фотографий ${filesLimit}`}
-              getFileAddedMessage={fileName => `Изображение ${fileName} загружено \n`}
-              getFileRemovedMessage={fileName => `Изображение ${fileName} удалено`}
-              getDropRejectMessage={(fileName, acceptedFiles, maxFileSize) => `Изображение ${fileName} несоответсвует разрешенным параметрам. Тип: ${acceptedFiles} Максимальный размер: ${maxFileSize / 1024 / 1024} МБ`}
-            /> */}
+              //getFileLimitExceedMessage={(filesLimit) => `Максимальное количество фотографий ${filesLimit}`}
+              //getFileAddedMessage={fileName => `Изображение ${fileName} загружено \n`}
+              //getFileRemovedMessage={fileName => `Изображение ${fileName} удалено`}
+              //getDropRejectMessage={(fileName, acceptedFiles, maxFileSize) => `Изображение ${fileName} несоответсвует разрешенным параметрам. Тип: ${acceptedFiles} Максимальный размер: ${maxFileSize / 1024 / 1024} МБ`}
+            />
           </FormControl>
 
           <FormControl className={`${classes.formControl} ${classes.price}`}>
