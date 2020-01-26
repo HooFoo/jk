@@ -5,9 +5,11 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "strictNullChecks": true,
     "module": "commonjs",
+    "strictNullChecks": true,
     "target": "es6",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "jsx": "react"
   }
 }

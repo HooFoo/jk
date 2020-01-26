@@ -2,9 +2,16 @@ import axios, { AxiosResponse } from 'axios';
 import * as humps from 'humps';
 
 import FailResponseError from './fail-response-error';
+import Injectable from '../dipendency-injection/injectable';
+import { MethodDecorator } from '../dipendency-injection/MethodDecorator';
 
-export default {
-  post(url: string, params: any) {
+export default class Http extends Injectable {
+
+  @MethodDecorator
+  public inject(http: Http) {}
+
+
+  static post(url: string, params: any) {
     return execute(url, () => axios.post(url, humps.decamelizeKeys(params),
       {
         headers: headers(),
@@ -12,9 +19,9 @@ export default {
       .then(checkSuccess)
       .then(extractData)
       .then(humps.camelizeKeys));
-  },
+  }
 
-  get(url: string, params: any = {}) {
+  static get(url: string, params: any = {}) {
     return execute(url, () => axios.get(url,
       {
         params: humps.decamelizeKeys(params),
@@ -23,9 +30,9 @@ export default {
       .then(checkSuccess)
       .then(extractData)
       .then(humps.camelizeKeys));
-  },
+  }
 
-  put(url: string, params: any = {}) {
+  static put(url: string, params: any = {}) {
     return execute(url, () => axios.put(url, humps.decamelizeKeys(params),
       {
         headers: headers(),
@@ -33,9 +40,9 @@ export default {
       .then(checkSuccess)
       .then(extractData)
       .then(humps.camelizeKeys));
-  },
+  }
 
-  patch(url: string, params: any = {}) {
+  static patch(url: string, params: any = {}) {
     return execute(url, () => axios.patch(url, humps.decamelizeKeys(params),
       {
         headers: headers(),
@@ -43,9 +50,9 @@ export default {
       .then(checkSuccess)
       .then(extractData)
       .then(humps.camelizeKeys));
-  },
+  }
 
-  delete(url: string) {
+  static delete(url: string) {
     return execute(url, () => axios.delete(url,
       {
         headers: headers(),
@@ -53,7 +60,7 @@ export default {
       .then(checkSuccess)
       .then(extractData)
       .then(humps.camelizeKeys));
-  },
+  }
 };
 
 type Dictionary = { [index: string]: string }
