@@ -3,13 +3,12 @@ import * as humps from 'humps';
 
 import FailResponseError from './fail-response-error';
 import Injectable from '../dipendency-injection/injectable';
-import { MethodDecorator } from '../dipendency-injection/MethodDecorator';
+import { Inject } from '../dipendency-injection/inject.decorator';
 
 export default class Http extends Injectable {
 
-  @MethodDecorator
-  public inject(http: Http) {}
-
+  @Inject
+  public inject(): void {}
 
   static post(url: string, params: any) {
     return execute(url, () => axios.post(url, humps.decamelizeKeys(params),

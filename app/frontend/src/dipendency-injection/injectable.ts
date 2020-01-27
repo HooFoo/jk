@@ -1,9 +1,10 @@
-export default class Injectable
+export default abstract class Injectable
 {
     public dependencies: Injectable[] = [];
-    //createInstance(dependencies?: string[]): Promise<Injectable>;
 
-    protected Resolve<T extends Injectable>(): T {
+    protected resolve<T extends Injectable>(): T {
         return this.dependencies.find(x => x as T != null) as T;
     }
+
+    public abstract inject(...args: Injectable[]): void;
 }

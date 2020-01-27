@@ -1,28 +1,49 @@
-import webpackResolver from "./webpack-resolver";
+import "reflect-metadata";
 import Injectable from "./injectable";
 
-export type ImportDictionary = { [index: string]: () => Promise<any> }
-
-
+type DependencyDictionary = { [index: string]: Injectable }
 
 export default class Container {
 
-    //private requires:ImportDictionary;
-    private dependencyLoader: (name: string) => Promise<any>;
+    public dependencies: DependencyDictionary = {};
 
-    public init<T extends Injectable>(defenitions: (new () => T)[]) {
+    public resolve<T extends Injectable>(typeCtor: new (...args: any[]) => T): T {
+        let name = typeCtor.name;
 
+        let instance = this.getDependecy<T>(name);
+        if (instance) {
+            return instance;
+        }
 
+        instance = new typeCtor();
+        this.dependencies[name] = instance;
 
+        this.initDependencies(instance);
+
+        return instance;
     }
 
-    public resolve<T extends Injectable>(name: string): T {
+    private initDependencies(instance: any) {
+        let params = Reflect.getMetadata("design:paramtypes",  instance, "inject") as any[];
 
+        params.forEach(ctor => {
+            let dependency = this.getDependecy<any>(ctor.name);
+
+            if (!dependency) {
+                dependency = new ctor();
+
+                this.dependencies[ctor.name] = dependency;
+                this.initDependencies(dependency);
+            }
+
+            instance.dependencies.push(dependency);
+        });
+    }
+
+    private getDependecy<T extends Injectable>(name: string): T {
+        if (name in this.dependencies) {
+            return this.dependencies[name] as T
+        }
         return <T><unknown>null;
-
-
-
     }
-
-
 }
