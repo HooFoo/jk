@@ -1,17 +1,19 @@
-import http from '../helpers/fetch-helpers';
+import Http from '../helpers/fetch-helpers';
 import Category from "../models/category";
 import { Inject } from '../dipendency-injection/inject.decorator';
 import Injectable from '../dipendency-injection/injectable';
 
 export default class CategoryRepository extends Injectable {
   private readonly baseUrl = '/api/v1/buildings/{building_id}/categories';
+  private http: Http;
 
   @Inject
-  public inject(http: http): void {
+  public inject(http: Http): void {
+    this.http = http;
   }
   
   public index(building_id: string): Promise<Category[]> {
-    return this.resolve<http>().get(this.url(building_id))
+    return this.http.get(this.url(building_id))
       .then((response) => {
         return response.map((b: any) => {
           return new Category(b.attributes);

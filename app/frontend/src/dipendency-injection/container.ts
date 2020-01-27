@@ -45,6 +45,8 @@ export default class Container {
 
             instance.dependencies.push(dependency);
         });
+
+        (instance as Injectable).inject(...instance.dependencies);
     }
 
     private getDependecy<T extends Injectable>(name: string): T {
