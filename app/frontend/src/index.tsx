@@ -8,16 +8,6 @@ import AddressRepository from './repositories/address-repository';
 
 mockData;
 
-let container = new Container();
-
-let ar = container.resolve(AddressRepository);
-
-console.log(ar.checkInjection());
-
-let ar2 = container.resolve(AddressRepository);
-
-console.log(ar2.checkInjection())
-
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

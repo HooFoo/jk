@@ -10,8 +10,10 @@ import { Button, Container, Grid, Snackbar, Typography, Theme } from '@material-
 import AddressRepository from "../repositories/address-repository";
 
 import MapYandexWrapper from '../components/pages/address-select/map-yandex-wrapper';
+import { ResolveDependencyProps } from '../dipendency-injection/resolve-dependency-props';
+import withDependencies from '../dipendency-injection/with-dependencies';
 
-interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any>, ResolveDependencyProps {
 }
 
 interface IState {
@@ -22,9 +24,12 @@ interface IState {
 }
 
 class AddressSelectPage extends React.Component<IProps, IState> {
+  private addressRepository: AddressRepository;
 
   constructor(props: IProps) {
     super(props);
+
+    this.addressRepository = props.resolve(AddressRepository);
 
     this.state = {
       address: "",
@@ -46,7 +51,7 @@ class AddressSelectPage extends React.Component<IProps, IState> {
     if (notBlank(uid)) {
       return history.push(`/building/${uid}`)
     } else {
-      return AddressRepository.index(address)
+      return this.addressRepository.index(address)
         .then((building) => {
           history.push(`/building/${building.uid}`);
         })
@@ -108,4 +113,4 @@ const styles = (theme: Theme) => createStyles({
   }
 });
 
-export default withStyles(styles)(AddressSelectPage);
+export default withStyles(styles)(withDependencies(AddressSelectPage));

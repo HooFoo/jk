@@ -21,7 +21,7 @@ import { DropzoneArea } from 'material-ui-dropzone'
 import MaskedInput from 'react-text-mask';
 import NumberFormat from 'react-number-format';
 
-import AdvertisementRepository from '../repositories/advertisements-repository';
+import AdvertisementRepository from '../repositories/advertisement-repository';
 import CategoryRepository from '../repositories/category-repository';
 
 import NavBar from '../components/shared/nav-bar';
@@ -29,6 +29,8 @@ import NavBar from '../components/shared/nav-bar';
 import { deepOrange } from '@material-ui/core/colors'
 import { RouteComponentProps } from 'react-router-dom';
 import Category from '../models/category';
+import withDependencies from '../dipendency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../dipendency-injection/resolve-dependency-props';
 
 const CssTextField = withStyles({
   root: {
@@ -88,7 +90,7 @@ function NumberFormatCustom(props: any) {
   );
 }
 
-interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any>, ResolveDependencyProps {
 }
 
 interface IState {
@@ -104,9 +106,14 @@ interface IState {
 }
 
 class AdvertisementAddPage extends React.Component<IProps, IState> {
+  private сategoryRepository: CategoryRepository;
+  private advertisementRepository: AdvertisementRepository;
 
   constructor(props: IProps) {
     super(props);
+
+    this.сategoryRepository = props.resolve(CategoryRepository);
+    this.advertisementRepository = props.resolve(AdvertisementRepository);
 
     this.state = { 
       title: '',
@@ -131,7 +138,7 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
   fetchCategories() {
     const { match: { params: { uid } } } = this.props;
 
-    return CategoryRepository.index(uid).then(data => {
+    return this.сategoryRepository.index(uid).then(data => {
       this.setState({...this.state, categories: data, isFetching: false });
     }).catch(error => {
       console.log(error);
@@ -141,7 +148,7 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
 
   onSaveClick(event: any){
     const { history, match: { params: { uid } } } = this.props;
-    AdvertisementRepository.create(uid, {
+    this.advertisementRepository.create(uid, {
       title: this.state.title,
       description: this.state.description,
       phone: this.state.phone,
@@ -337,4 +344,4 @@ const styles = (theme: Theme) => createStyles({
   }
 });
 
-export default withStyles(styles)(AdvertisementAddPage);
+export default withStyles(styles)(withDependencies(AdvertisementAddPage));

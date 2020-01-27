@@ -4,6 +4,13 @@ import Injectable from "./injectable";
 type DependencyDictionary = { [index: string]: Injectable }
 
 export default class Container {
+    private static instance: Container = new Container();
+
+    public static get Instance() {
+        return this.instance;
+    }
+
+    private constructor() {}
 
     public dependencies: DependencyDictionary = {};
 

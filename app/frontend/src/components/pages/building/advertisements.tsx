@@ -3,7 +3,7 @@ import * as H from 'history';
 
 import { withStyles, WithStyles } from '@material-ui/styles';
 
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import { Theme, createStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -27,13 +27,15 @@ import {
   Zoom
 } from '@material-ui/core';
 
-import AdvertisementRepository from '../../../repositories/advertisements-repository';
+import AdvertisementRepository from '../../../repositories/advertisement-repository';
 import CategoryRepository from '../../../repositories/category-repository';
 import Advertisement from '../../../models/advertisement';
 import Category from '../../../models/category';
+import withDependencies from '../../../dipendency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../../../dipendency-injection/resolve-dependency-props';
 
 
-interface IProps extends WithStyles<typeof styles> {
+interface IProps extends WithStyles<typeof styles>, ResolveDependencyProps {
   uid: string,
   history: H.History<H.LocationState>
 }
@@ -46,9 +48,14 @@ interface IState {
 }
 
 class Advertisements extends React.Component<IProps, IState> {
+  private сategoryRepository: CategoryRepository;
+  private advertisementRepository: AdvertisementRepository;
 
   constructor(props: IProps) {
     super(props);
+
+    this.сategoryRepository = props.resolve(CategoryRepository);
+    this.advertisementRepository = props.resolve(AdvertisementRepository);
 
     this.state = { 
       isFetching: true,
@@ -67,7 +74,7 @@ class Advertisements extends React.Component<IProps, IState> {
   }
 
   fetchCategories() {
-    return CategoryRepository.index(this.props.uid).then(data => {
+    return this.сategoryRepository.index(this.props.uid).then(data => {
       this.setState({
         ...this.state,
         categories: data
@@ -79,7 +86,7 @@ class Advertisements extends React.Component<IProps, IState> {
   }
 
   fetchAdvertisements() {
-    AdvertisementRepository.index(this.props.uid).then(data => {
+    this.advertisementRepository.index(this.props.uid).then(data => {
       this.setState({
         ...this.state,
         advertisements: data,
@@ -236,4 +243,4 @@ const styles = (theme: Theme) => createStyles({
   }
 });
 
-export default withStyles(styles)(Advertisements);
+export default withStyles(styles)(withDependencies(Advertisements));
