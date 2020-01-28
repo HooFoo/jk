@@ -1,8 +1,12 @@
-import {} from './mock-data-import';
+import * as mockData from './mock-data-import';
 import "../public/manifest.json";
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './app';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { App } from './app';
+import Container from './dipendency-injection/container';
+import AddressRepository from './repositories/address-repository';
+
+mockData;
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

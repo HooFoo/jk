@@ -1,5 +1,10 @@
 export default class Building {
-  constructor(params) {
+  public latitude: number;
+  public longitude: number;
+  public address: string;
+  public uid: string;
+
+  constructor(params: any) {
     Object.assign(this, params)
   }
 

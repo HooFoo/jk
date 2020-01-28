@@ -1,38 +1,57 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/styles';
+import * as React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+
+import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 
 import { notBlank } from "../helpers/ramda-helper";
 
-import { Button, Container, Grid, Snackbar, Typography } from '@material-ui/core';
+import { Button, Container, Grid, Snackbar, Typography, Theme } from '@material-ui/core';
 
-import inject from "../helpers/inject";
 import AddressRepository from "../repositories/address-repository";
 
 import MapYandexWrapper from '../components/pages/address-select/map-yandex-wrapper';
+import { ResolveDependencyProps } from '../dipendency-injection/resolve-dependency-props';
+import withDependencies from '../dipendency-injection/with-dependencies';
 
-class AddressSelectPage extends Component {
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
-    addressRepository: PropTypes.func.isRequired
-  };
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any>, ResolveDependencyProps {
+}
 
-  state = { address: null, uid: null, loading: false, error: null };
+interface IState {
+  address: string,
+  uid: string;
+  loading: boolean,
+  error: any,
+}
 
-  onAddressSelect = (address, uid) => {
+class AddressSelectPage extends React.Component<IProps, IState> {
+  private addressRepository: AddressRepository;
+
+  constructor(props: IProps) {
+    super(props);
+
+    this.addressRepository = props.resolve(AddressRepository);
+
+    this.state = {
+      address: "",
+      uid: "",
+      loading: false,
+      error: null
+    };
+  }
+
+  onAddressSelect = (address:string, uid: string) => {
     this.setState({ address, uid });
   };
 
   onButtonClick = () => {
-    const { addressRepository, history } = this.props;
+    const { history } = this.props;
     const { address, uid } = this.state;
 
     this.setState({ loading: true });
     if (notBlank(uid)) {
       return history.push(`/building/${uid}`)
     } else {
-      return addressRepository.index(address)
+      return this.addressRepository.index(address)
         .then((building) => {
           history.push(`/building/${building.uid}`);
         })
@@ -53,7 +72,7 @@ class AddressSelectPage extends Component {
     const { classes } = this.props;
     const { address, loading, error } = this.state;
 
-    return <Fragment>
+    return <React.Fragment>
       <Container maxWidth="md">
         <Grid container>
           <Grid item xs={12}>
@@ -79,11 +98,11 @@ class AddressSelectPage extends Component {
         </Grid>
         <Snackbar open={notBlank(error)} onClose={this.onSnackbarClose} message={error} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} autoHideDuration={2000} />
       </Container>
-    </Fragment>;
+    </React.Fragment>;
   }
 }
 
-const useStyles = () => ({
+const styles = (theme: Theme) => createStyles({
   titleBar: {
   },
   addressBox: {
@@ -94,8 +113,4 @@ const useStyles = () => ({
   }
 });
 
-const dependencies = {
-  addressRepository: AddressRepository
-};
-
-export default withStyles(useStyles)(inject(dependencies, AddressSelectPage));
+export default withStyles(styles)(withDependencies(AddressSelectPage));

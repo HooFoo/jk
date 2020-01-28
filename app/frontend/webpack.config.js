@@ -10,17 +10,37 @@ module.exports = (env) => {
   }, {});
 
   return {
-    entry: ['@babel/polyfill', './src/index.js'],
+    //entry: ['@babel/polyfill', './src/index.js'],
+    entry: [
+      "./src/index.tsx"
+    ],
     devtool: "source-map",
-
+    resolve: {
+      "extensions": [
+        ".ts",
+        ".tsx",
+        ".js"
+      ],
+      "modules": [
+        "./node_modules"
+      ]
+    },
     module: {
       rules: [
         {
-          test: /\.(js|jsx)$/,
+          test: /\.ts(x?)$/,
           exclude: /node_modules/,
-          use: {
-            loader: "babel-loader"
-          }
+          use: [{
+            loader: "ts-loader"
+          }]
+        },
+        {
+          enforce: "pre",
+          test: /\.js$/,
+          loader: "source-map-loader",
+          exclude: [
+            /\/node_modules\//
+          ]
         },
         {
           test: /\.html$/,
