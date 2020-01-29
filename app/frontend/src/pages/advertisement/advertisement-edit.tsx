@@ -105,7 +105,7 @@ interface IState {
   error?: string,
 }
 
-class AdvertisementAddPage extends React.Component<IProps, IState> {
+class AdvertisementEditPage extends React.Component<IProps, IState> {
   private сategoryRepository: CategoryRepository;
   private advertisementRepository: AdvertisementRepository;
 
@@ -132,17 +132,23 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    this.fetchCategories();
+    let promise = this.fetchCategories();
+
+    let param = this.props.match.params.section;
+
+    promise.then(() => {
+        this.setState({...this.state, isFetching: false });
+      });
   }
 
-  fetchCategories() {
+  fetchCategories(): Promise<any> {
     const { match: { params: { uid } } } = this.props;
 
     return this.сategoryRepository.index(uid).then(data => {
-      this.setState({...this.state, categories: data, isFetching: false });
+      this.setState({...this.state, categories: data });
     }).catch(error => {
       console.log(error);
-      this.setState({...this.state, isFetching: false });
+      this.setState({...this.state, error: error });
     });
   }
 
@@ -282,7 +288,9 @@ const styles = (theme: Theme) => createStyles({
     padding: 0,
   },
   formContainer: {
-    margin: '5px',
+    height: 'calc(100vh - 91px)',
+    overflow: 'auto',
+    'margin-top': '10px',
     padding: '10px',
   },
   title: {
@@ -342,4 +350,4 @@ const styles = (theme: Theme) => createStyles({
   }
 });
 
-export default withStyles(styles)(withDependencies(AdvertisementAddPage));
+export default withStyles(styles)(withDependencies(AdvertisementEditPage));

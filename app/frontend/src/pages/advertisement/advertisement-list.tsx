@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as H from 'history';
 
 import { withStyles, WithStyles } from '@material-ui/styles';
 
@@ -46,7 +45,7 @@ interface IState {
   categoryValue: string,
 }
 
-class AdvertisementsPage extends React.Component<IProps, IState> {
+class AdvertisementListPage extends React.Component<IProps, IState> {
   private сategoryRepository: CategoryRepository;
   private advertisementRepository: AdvertisementRepository;
 
@@ -100,7 +99,7 @@ class AdvertisementsPage extends React.Component<IProps, IState> {
 
   onAddClick() {
     const { history } = this.props;
-    return history.push(`/building/${this.uid}/advertisement-add`)
+    return history.push(`/building/${this.uid}/advertisements/edit`)
   }
 
   handleChange(name: any) { 
@@ -247,4 +246,4 @@ const styles = (theme: Theme) => createStyles({
   }
 });
 
-export default withStyles(styles)(withDependencies(AdvertisementsPage));
+export default withStyles(styles)(withDependencies(AdvertisementListPage));

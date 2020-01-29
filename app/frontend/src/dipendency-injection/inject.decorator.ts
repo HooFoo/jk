@@ -6,8 +6,4 @@ export function Inject(
     propertyKey: string | symbol,
     descriptor: PropertyDescriptor,
 ) {
-    console.log(
-        `Decorating method ${String(propertyKey)}` +
-        ` from ${target.constructor.name}`,
-    );
 }

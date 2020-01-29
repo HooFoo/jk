@@ -13,10 +13,7 @@ import AddShoppingCartTwoToneIcon from '@material-ui/icons/AddShoppingCartTwoTon
 
 import NavBar from '../components/shared/nav-bar';
 
-import ChatPage from './chat';
-import AdvertisementsPage from './advertisement/advertisements';
-import AdvertisementAddPage from './advertisement/advertisement-add';
-
+import BuildingRouter from './building-router';
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
 }
@@ -40,19 +37,13 @@ class BuildingPage extends React.Component<IProps, IState> {
     return history.push(`/building/${this.uid}/${value}`)
   };
 
-  private get selectedTab() {
-    let selectedTab: string = "chat";
-
-    const path = this.props.location.pathname.trimLeft("/");
-    if (path.endsWith("advertisements") || path.endsWith("advertisement-add")) {
-      selectedTab = "advertisements";
-    }
-
-    return selectedTab;
-  }
-
   private get uid() {
     return this.props.match.params.uid;
+  }
+
+  private get selectedTab() {
+    const selectedTab: string = this.props.match.params.section;
+    return selectedTab || "chat";
   }
 
   render() {
@@ -74,29 +65,13 @@ class BuildingPage extends React.Component<IProps, IState> {
         </Tabs>
       </NavBar>
       <Container maxWidth="md" className={classes.content}>
-        <Switch>
-          <Redirect exact from="/building/:uid/" to="/building/:uid/chat" />
-          <Route path="/building/:uid/:section" render={ (props) => {
-              switch(props.match.params.section) {
-                case "chat":
-                  return <ChatPage {...props} />
-                case "advertisements":
-                  return <AdvertisementsPage {...props} />;
-                case "advertisement-add":
-                  return <AdvertisementAddPage {...props} />;
-              }
-            }
-          }/>
-        </Switch>
+        <BuildingRouter />
       </Container>
     </React.Fragment>);
   }
 }
 
 const styles = (theme: Theme) => createStyles({
-  root: {
-    height: 'calc(100vh - 64px)',
-  },
   content: {
     padding: 0,
   }
