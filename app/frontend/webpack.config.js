@@ -63,7 +63,9 @@ module.exports = (env) => {
     devServer: {
       proxy: {
         '/api': 'http://localhost:3001'
-      }
+      },
+      historyApiFallback: true,
+      publicPath: '/',
     },
     plugins: [
       new webpack.DefinePlugin(envKeys),

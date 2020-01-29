@@ -21,16 +21,16 @@ import { DropzoneArea } from 'material-ui-dropzone'
 import MaskedInput from 'react-text-mask';
 import NumberFormat from 'react-number-format';
 
-import AdvertisementRepository from '../repositories/advertisement-repository';
-import CategoryRepository from '../repositories/category-repository';
+import AdvertisementRepository from '../../repositories/advertisement-repository';
+import CategoryRepository from '../../repositories/category-repository';
 
-import NavBar from '../components/shared/nav-bar';
+import NavBar from '../../components/shared/nav-bar';
 
 import { deepOrange } from '@material-ui/core/colors'
 import { RouteComponentProps } from 'react-router-dom';
-import Category from '../models/category';
-import withDependencies from '../dipendency-injection/with-dependencies';
-import { ResolveDependencyProps } from '../dipendency-injection/resolve-dependency-props';
+import Category from '../../models/category';
+import withDependencies from '../../dipendency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../../dipendency-injection/resolve-dependency-props';
 
 const CssTextField = withStyles({
   root: {
@@ -155,7 +155,7 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
       files: this.state.files,
       categoryValue: this.state.categoryValue,
     }).then(() => {
-      return history.push(`/building/${uid}`);
+      return history.push(`/building/${uid}/advertisements`);
     }).catch(error => {
       this.setState({...this.state, error: error && error.message ? error.message : "Ошибка сохранения."});
     });
@@ -179,8 +179,6 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
     const { match: { params: { uid } } } = this.props;
 
     return (<React.Fragment>
-      <NavBar>
-      </NavBar>
       <Container maxWidth="md" className={classes.root}>
         <Paper className={classes.formContainer}>
 

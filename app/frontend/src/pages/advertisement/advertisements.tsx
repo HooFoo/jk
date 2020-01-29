@@ -27,17 +27,16 @@ import {
   Zoom
 } from '@material-ui/core';
 
-import AdvertisementRepository from '../../../repositories/advertisement-repository';
-import CategoryRepository from '../../../repositories/category-repository';
-import Advertisement from '../../../models/advertisement';
-import Category from '../../../models/category';
-import withDependencies from '../../../dipendency-injection/with-dependencies';
-import { ResolveDependencyProps } from '../../../dipendency-injection/resolve-dependency-props';
+import AdvertisementRepository from '../../repositories/advertisement-repository';
+import CategoryRepository from '../../repositories/category-repository';
+import Advertisement from '../../models/advertisement';
+import Category from '../../models/category';
+import withDependencies from '../../dipendency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../../dipendency-injection/resolve-dependency-props';
+import { RouteComponentProps } from 'react-router-dom';
 
 
-interface IProps extends WithStyles<typeof styles>, ResolveDependencyProps {
-  uid: string,
-  history: H.History<H.LocationState>
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any>, ResolveDependencyProps {
 }
 
 interface IState {
@@ -47,7 +46,7 @@ interface IState {
   categoryValue: string,
 }
 
-class Advertisements extends React.Component<IProps, IState> {
+class AdvertisementsPage extends React.Component<IProps, IState> {
   private сategoryRepository: CategoryRepository;
   private advertisementRepository: AdvertisementRepository;
 
@@ -74,7 +73,8 @@ class Advertisements extends React.Component<IProps, IState> {
   }
 
   fetchCategories() {
-    return this.сategoryRepository.index(this.props.uid).then(data => {
+    const uid = this.props.match.params.uid;
+    return this.сategoryRepository.index(this.uid).then(data => {
       this.setState({
         ...this.state,
         categories: data
@@ -86,7 +86,7 @@ class Advertisements extends React.Component<IProps, IState> {
   }
 
   fetchAdvertisements() {
-    this.advertisementRepository.index(this.props.uid).then(data => {
+    this.advertisementRepository.index(this.uid).then(data => {
       this.setState({
         ...this.state,
         advertisements: data,
@@ -99,8 +99,8 @@ class Advertisements extends React.Component<IProps, IState> {
   }
 
   onAddClick() {
-    const { uid, history } = this.props;
-    return history.push(`/building/${uid}/advertisement-add`)
+    const { history } = this.props;
+    return history.push(`/building/${this.uid}/advertisement-add`)
   }
 
   handleChange(name: any) { 
@@ -125,8 +125,12 @@ class Advertisements extends React.Component<IProps, IState> {
     }
   }
 
+  private get uid() {
+    return this.props.match.params.uid;
+  }
+
   render() {
-    const { classes, uid } = this.props;
+    const { classes } = this.props;
     const { isFetching, categories, advertisements } = this.state;
 
     return (
@@ -243,4 +247,4 @@ const styles = (theme: Theme) => createStyles({
   }
 });
 
-export default withStyles(styles)(withDependencies(Advertisements));
+export default withStyles(styles)(withDependencies(AdvertisementsPage));

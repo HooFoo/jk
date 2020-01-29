@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Switch, Route, Redirect } from 'react-router-dom';
 
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
 
@@ -11,14 +11,17 @@ import Tab from '@material-ui/core/Tab';
 import ChatTwoToneIcon from '@material-ui/icons/ChatTwoTone';
 import AddShoppingCartTwoToneIcon from '@material-ui/icons/AddShoppingCartTwoTone';
 
-import Advertisements from '../components/pages/building/advertisements';
 import NavBar from '../components/shared/nav-bar';
+
+import ChatPage from './chat';
+import AdvertisementsPage from './advertisement/advertisements';
+import AdvertisementAddPage from './advertisement/advertisement-add';
+
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
 }
 
 interface IState {
-  value: string
 }
 
 class BuildingPage extends React.Component<IProps, IState> {
@@ -27,25 +30,38 @@ class BuildingPage extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
-      value: "advertisements"
     };
 
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(event: any, newValue: string) {
-    this.setState({ value: newValue });
+  handleChange(event: any, value: string) {
+    const { history } = this.props;
+    return history.push(`/building/${this.uid}/${value}`)
   };
 
+  private get selectedTab() {
+    let selectedTab: string = "chat";
+
+    const path = this.props.location.pathname.trimLeft("/");
+    if (path.endsWith("advertisements") || path.endsWith("advertisement-add")) {
+      selectedTab = "advertisements";
+    }
+
+    return selectedTab;
+  }
+
+  private get uid() {
+    return this.props.match.params.uid;
+  }
+
   render() {
-    const { classes, history } = this.props;
-    const { match: { params: { uid } } } = this.props;
-    const { value } = this.state;
+    const { classes } = this.props;
 
     return (<React.Fragment>
       <NavBar>
         <Tabs
-            value={value}
+            value={this.selectedTab}
             onChange={this.handleChange}
             variant="scrollable"
             scrollButtons="on"
@@ -58,9 +74,20 @@ class BuildingPage extends React.Component<IProps, IState> {
         </Tabs>
       </NavBar>
       <Container maxWidth="md" className={classes.content}>
-        { value == "advertisements" &&
-          <Advertisements uid={uid} history={history} />
-        }
+        <Switch>
+          <Redirect exact from="/building/:uid/" to="/building/:uid/chat" />
+          <Route path="/building/:uid/:section" render={ (props) => {
+              switch(props.match.params.section) {
+                case "chat":
+                  return <ChatPage {...props} />
+                case "advertisements":
+                  return <AdvertisementsPage {...props} />;
+                case "advertisement-add":
+                  return <AdvertisementAddPage {...props} />;
+              }
+            }
+          }/>
+        </Switch>
       </Container>
     </React.Fragment>);
   }
