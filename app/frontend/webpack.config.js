@@ -10,10 +10,7 @@ module.exports = (env) => {
   }, {});
 
   return {
-    //entry: ['@babel/polyfill', './src/index.js'],
-    entry: [
-      "./src/index.tsx"
-    ],
+    entry: ['@babel/polyfill', './src/index.tsx'],
     devtool: "source-map",
     resolve: {
       "extensions": [

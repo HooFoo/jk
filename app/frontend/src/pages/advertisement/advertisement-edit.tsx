@@ -99,6 +99,7 @@ interface IState {
   currency: string,
   phone: string,
   files: any[],
+  initialFiles: string[],
   categories: Category[],
   categoryValue: string,
   isFetching: boolean,
@@ -123,6 +124,7 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
       currency: 'RUB',
       phone: '+7',
       files: [],
+      initialFiles: [],
       categories: [],
       categoryValue: "",
       isFetching: true,
@@ -166,7 +168,7 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
         phone: data.phone,
         price: data.price,
         currency: data.currency,
-        files: [],
+        initialFiles: data.files,
       });
     }).catch(error => {
       console.log(error);
@@ -176,13 +178,20 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
 
   onSaveClick(event: any){
     const { history, match: { params: { uid } } } = this.props;
-    this.advertisementRepository.create(uid, {
+
+    const params = {
       title: this.state.title,
       description: this.state.description,
       phone: this.state.phone,
       files: this.state.files,
       categoryValue: this.state.categoryValue,
-    }).then(() => {
+    };
+
+    const savePromise = this.state.id
+      ? this.advertisementRepository.update(uid, this.state.id, params)
+      : this.advertisementRepository.create(uid, params);
+
+    savePromise.then(() => {
       return history.push(`/building/${uid}/advertisements`);
     }).catch(error => {
       this.setState({...this.state, error: error && error.message ? error.message : "Ошибка сохранения."});
@@ -264,12 +273,13 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
               filesLimit={15}
               maxFileSize={50 * 1024 * 1024} // 50 MB
               dropzoneText="Выберите фотографии"
-              //showFileNames={true}
+              showFileNames={true}
               showFileNamesInPreview={true}
-              //getFileLimitExceedMessage={(filesLimit) => `Максимальное количество фотографий ${filesLimit}`}
-              //getFileAddedMessage={fileName => `Изображение ${fileName} загружено \n`}
-              //getFileRemovedMessage={fileName => `Изображение ${fileName} удалено`}
-              //getDropRejectMessage={(fileName, acceptedFiles, maxFileSize) => `Изображение ${fileName} несоответсвует разрешенным параметрам. Тип: ${acceptedFiles} Максимальный размер: ${maxFileSize / 1024 / 1024} МБ`}
+              initialFiles={this.state.initialFiles}
+              getFileLimitExceedMessage={(filesLimit) => `Максимальное количество фотографий ${filesLimit}`}
+              getFileAddedMessage={fileName => `Изображение ${fileName} загружено \n`}
+              getFileRemovedMessage={fileName => `Изображение ${fileName} удалено`}
+              getDropRejectMessage={(fileName, acceptedFiles, maxFileSize) => `Изображение ${fileName} несоответсвует разрешенным параметрам. Тип: ${acceptedFiles} Максимальный размер: ${maxFileSize / 1024 / 1024} МБ`}
             />
           </FormControl>
 

@@ -7,6 +7,7 @@ export default class Advertisement {
   public category: string;
   public img: string;
   public phone: string;
+  public files: string[];
 
   constructor(params: any) {
     Object.assign(this, params)

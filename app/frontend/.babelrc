@@ -3,13 +3,13 @@
     ["@babel/preset-env", {
       "useBuiltIns": "entry"
     }],
+    "@babel/typescript",
     "@babel/preset-react"
   ],
   "plugins": [
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-proposal-export-default-from",
     "@babel/plugin-transform-proto-to-assign",
-    "@babel/plugin-transform-strict-mode",
-    "transform-flow-strip-types"
+    "@babel/plugin-transform-strict-mode"
   ]
 }
