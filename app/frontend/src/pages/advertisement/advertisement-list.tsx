@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 
 import { withStyles, WithStyles } from '@material-ui/styles';
 
@@ -32,8 +33,7 @@ import Advertisement from '../../models/advertisement';
 import Category from '../../models/category';
 import withDependencies from '../../dipendency-injection/with-dependencies';
 import { ResolveDependencyProps } from '../../dipendency-injection/resolve-dependency-props';
-import { RouteComponentProps } from 'react-router-dom';
-
+import "../../helpers/string.extensions";
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any>, ResolveDependencyProps {
 }
@@ -111,19 +111,6 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
     };
   }
 
-  getCurrencySymbol = (currency: string) => {
-    switch(currency){
-      case 'RUB':
-        return '₽';
-      case 'USD':
-        return '$';
-      case 'EUR':
-        return '€';
-      default:
-        return 'unknown currency';
-    }
-  }
-
   private get uid() {
     return this.props.match.params.uid;
   }
@@ -178,7 +165,7 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
                         <InfoIcon />
                       </IconButton>
                     </Tooltip>
-                    <Typography className={classes.price} variant="h5">{tile.price} {this.getCurrencySymbol(tile.currency)}</Typography>
+                    <Typography className={classes.price} variant="h5">{tile.price} {tile.currency.getCurrencySymbol()}</Typography>
                   </React.Fragment>
                 }
               />

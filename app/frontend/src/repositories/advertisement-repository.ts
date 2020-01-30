@@ -49,7 +49,7 @@ export default class AdvertisementRepository extends Injectable {
   public url(building_id: string, id?: string): string {
     let base = this.baseUrl.replace('{building_id}', building_id);
     if (id) {
-      base += id;
+      base += `/${id}`;
     }
     return base;
   }

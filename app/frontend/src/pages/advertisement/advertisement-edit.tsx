@@ -24,8 +24,6 @@ import NumberFormat from 'react-number-format';
 import AdvertisementRepository from '../../repositories/advertisement-repository';
 import CategoryRepository from '../../repositories/category-repository';
 
-import NavBar from '../../components/shared/nav-bar';
-
 import { deepOrange } from '@material-ui/core/colors'
 import { RouteComponentProps } from 'react-router-dom';
 import Category from '../../models/category';
@@ -94,9 +92,11 @@ interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any>, Re
 }
 
 interface IState {
+  id: string,
   title: string,
   description: string,
   price: number,
+  currency: string,
   phone: string,
   files: any[],
   categories: Category[],
@@ -116,9 +116,11 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
     this.advertisementRepository = props.resolve(AdvertisementRepository);
 
     this.state = { 
+      id: '',
       title: '',
       description: '',
       price: 0,
+      currency: 'RUB',
       phone: '+7',
       files: [],
       categories: [],
@@ -134,18 +136,38 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
   componentDidMount() {
     let promise = this.fetchCategories();
 
-    let param = this.props.match.params.section;
+    let id = this.props.match.params.id;
+    if (id) {
+      promise = promise.then(() => this.fetchAdvertisement(id));
+    }
 
     promise.then(() => {
-        this.setState({...this.state, isFetching: false });
-      });
+      this.setState({...this.state, isFetching: false });
+    });
   }
 
   fetchCategories(): Promise<any> {
-    const { match: { params: { uid } } } = this.props;
-
-    return this.сategoryRepository.index(uid).then(data => {
+    return this.сategoryRepository.index(this.props.match.params.uid).then(data => {
       this.setState({...this.state, categories: data });
+    }).catch(error => {
+      console.log(error);
+      this.setState({...this.state, error: error });
+    });
+  }
+
+  fetchAdvertisement(id: string): Promise<any> {
+    return this.advertisementRepository.show(this.props.match.params.uid, id).then(data => {
+      this.setState({
+        ...this.state,
+        id: id,
+        title: data.title,
+        description: data.description,
+        categoryValue: data.category,
+        phone: data.phone,
+        price: data.price,
+        currency: data.currency,
+        files: [],
+      });
     }).catch(error => {
       console.log(error);
       this.setState({...this.state, error: error });
@@ -189,7 +211,7 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
         <Paper className={classes.formContainer}>
 
           <Box fontFamily="fontFamily">
-            <Typography variant="h5">Новое объявление</Typography>
+            <Typography variant="h5">{this.state.id ? 'Редактирование' : 'Новое объявление'}</Typography>
           </Box>
 
           <FormControl className={classes.formControl}>
@@ -256,7 +278,7 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
             <FilledInput
               id="filled-adornment-price"
               value={this.state.price}
-              startAdornment={<InputAdornment position="start">₽</InputAdornment>}
+              startAdornment={<InputAdornment position="start">{this.state.currency.getCurrencySymbol()}</InputAdornment>}
               inputComponent={NumberFormatCustom}
               onChange={this.handleChange('price')}
             />
@@ -274,7 +296,7 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
 
           <FormControl className={`${classes.formControl} ${classes.formButtons}`}>
             <Button variant="outlined" color="secondary" onClick={this.onSaveClick} disabled={this.state.isFetching}>
-              Добавить объявление
+              {this.state.id ? 'Сохранить' : 'Добавить объявление'}
             </Button>
           </FormControl>
         </Paper>

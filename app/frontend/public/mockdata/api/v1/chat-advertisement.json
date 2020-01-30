@@ -1,0 +1,16 @@
+{
+  "data": {
+    "id": "1",
+    "type": "advertisements",
+    "attributes": {
+      "title": "Title1",
+      "description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.\nNunc viverra imperdiet enim. Fusce est. Vivamus a tellus.\nPellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.\nAenean nec lorem. In porttitor. Donec laoreet nonummy augue.\nSuspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.\n",
+      "price": 1000,
+      "currency": "RUB",
+      "due-in": "2019-10-22T06:15:20.791Z",
+      "category": 1,
+      "phone": "+79112223344",
+      "files": []
+    }
+  }
+}

@@ -2,34 +2,34 @@
   "data": [
     {
       "id": "1",
-      "type": "category",
+      "type": "categories",
       "attributes": {
         "id": "1",
-        "name": "category 1"
+        "name": "categories 1"
       }
     },
     {
       "id": "2",
-      "type": "category",
+      "type": "categories",
       "attributes": {
         "id": "2",
-        "name": "category 2"
+        "name": "categories 2"
       }
     },
     {
       "id": "3",
-      "type": "category",
+      "type": "categories",
       "attributes": {
         "id": "3",
-        "name": "category 3"
+        "name": "categories 3"
       }
     },
     {
       "id": "4",
-      "type": "category",
+      "type": "categories",
       "attributes": {
         "id": "4",
-        "name": "category 4"
+        "name": "categories 4"
       }
     }
   ]
