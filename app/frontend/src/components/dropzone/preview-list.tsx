@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as React from "react";
-import { isImage } from './helpers/helpers';
 
 const PreviewList = (props: any) => {
     const { fileObjects, handleRemove, showFileNames, useChipsForPreview, previewChipProps, classes } = props;
@@ -23,6 +22,15 @@ const PreviewList = (props: any) => {
             })
         )
     }
+
+    const isImage = (file: any) => {
+        const fileName = file.name || file.path;
+        const suffix = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+        if (suffix === 'jpg' || suffix === 'jpeg' || suffix === 'bmp' || suffix === 'png') {
+            return true;
+        }
+    };
+
     return (
         <Grid container spacing={8}>
             {

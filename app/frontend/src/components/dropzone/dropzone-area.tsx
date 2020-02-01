@@ -4,12 +4,12 @@ import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import * as React from 'react';
 import Dropzone from 'react-dropzone';
-import { convertBytesToMbsOrKbs, createFileFromUrl } from './helpers/helpers';
 import PreviewList from './preview-list';
 import SnackbarContentWrapper from './snackbar-content-wrapper';
 import { ChipProps } from '@material-ui/core/Chip';
 import { withDefaultProps } from '../../helpers/with-default-props';
 import { WithStyles } from '@material-ui/styles';
+import { convertBytesToMbsOrKbs } from '../../helpers/file-size-helper';
 
 type DropzoneAreaProps = {
     acceptedFiles?: string[];
@@ -91,7 +91,7 @@ class DropzoneArea extends React.Component<DropzoneAreaProps, any> {
     async filesArray(urls: any[]) {
         try {
             for (const url of urls) {
-                const file = await createFileFromUrl(url);
+                const file = await this.createFileFromUrl(url);
                 const reader = new FileReader();
                 reader.onload = (event: any) => {
                     this.setState({
@@ -208,6 +208,16 @@ class DropzoneArea extends React.Component<DropzoneAreaProps, any> {
             openSnackBar: false,
         });
     };
+
+    async createFileFromUrl(url: string) {
+        const response = await fetch(url);
+        const data = await response.blob();
+        const metadata = { type: data.type };
+        const ext = data.type.split('/').pop() || "ext";
+        const filename = url.replace(/\?.+/, '').split('/').pop() || `file.${ext}`;
+        return new File([data], filename, metadata);
+    }
+
     render() {
         const { classes } = this.props;
         const showPreviews = this.props.showPreviews && this.state.fileObjects.length > 0;
