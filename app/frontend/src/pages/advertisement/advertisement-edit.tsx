@@ -17,7 +17,7 @@ import {
   Theme,
 } from '@material-ui/core';
 
-import { DropzoneArea } from 'material-ui-dropzone'
+import DropzoneArea from '../../components/dropzone/dropzone-area';
 import MaskedInput from 'react-text-mask';
 import NumberFormat from 'react-number-format';
 
@@ -273,13 +273,15 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
               filesLimit={15}
               maxFileSize={50 * 1024 * 1024} // 50 MB
               dropzoneText="Выберите фотографии"
+              showPreviews={false}
+              showPreviewsInDropzone={true}
               showFileNames={true}
               showFileNamesInPreview={true}
               initialFiles={this.state.initialFiles}
-              getFileLimitExceedMessage={(filesLimit) => `Максимальное количество фотографий ${filesLimit}`}
-              getFileAddedMessage={fileName => `Изображение ${fileName} загружено \n`}
-              getFileRemovedMessage={fileName => `Изображение ${fileName} удалено`}
-              getDropRejectMessage={(fileName, acceptedFiles, maxFileSize) => `Изображение ${fileName} несоответсвует разрешенным параметрам. Тип: ${acceptedFiles} Максимальный размер: ${maxFileSize / 1024 / 1024} МБ`}
+              getFileLimitExceedMessage={(filesLimit: number) => `Максимальное количество фотографий ${filesLimit}`}
+              getFileAddedMessage={(fileName: string) => `Изображение ${fileName} загружено \n`}
+              getFileRemovedMessage={(fileName: string) => `Изображение ${fileName} удалено`}
+              getDropRejectMessage={(fileName: any, acceptedFiles: string[], maxFileSize: number) => `Изображение ${fileName} несоответсвует разрешенным параметрам. Тип: ${acceptedFiles} Максимальный размер: ${maxFileSize / 1024 / 1024} МБ`}
             />
           </FormControl>
 
