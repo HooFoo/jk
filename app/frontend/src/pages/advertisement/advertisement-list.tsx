@@ -6,6 +6,7 @@ import { withStyles, WithStyles } from '@material-ui/styles';
 import { Theme, createStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 import {
   Typography,
@@ -102,6 +103,13 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
     return history.push(`/building/${this.uid}/advertisements/edit`)
   }
 
+  onEditClick(id: string) {
+    return () => {
+      const { history } = this.props;
+      return history.push(`/building/${this.uid}/advertisements/edit/${id}`)
+    };
+  }
+
   handleChange(name: any) { 
     return (event: any) => {
       this.setState({
@@ -123,7 +131,7 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
       <div className={classes.root}>
         <Paper className={classes.filters}>
 
-          <Box fontFamily="fontFamily" className={classes.title}>
+          <Box fontFamily="fontFamily">
             <Typography variant="h5">Объявления</Typography>
           </Box>
 
@@ -149,14 +157,28 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
         <GridList cellHeight={180} className={classes.gridList}>
           {advertisements.map((tile, index) => (
             <GridListTile key={index}>
-              
+               {tile.editable &&
+                <Fab
+                  size="small"
+                  color="secondary"
+                  aria-label="edit"
+                  className={classes.editIcon}
+                  onClick={this.onEditClick(tile.id)}>
+                  <EditIcon />
+                </Fab>
+              }
               <img src={tile.img} alt={tile.title} />
               <GridListTileBar
                 title={tile.title}
                 subtitle={<span>{categories.find(x => x.id == tile.category)?.name}</span>}
+                classes={{
+                  title: classes.tileTitle,
+                  subtitle: classes.tileSubTitle,
+                }}
                 actionIcon={
                   <React.Fragment>
-                    <Tooltip 
+                    <Tooltip
+                      className={classes.description}
                       disableFocusListener
                       title={tile.description}
                       placement="left"
@@ -189,10 +211,12 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
 
 const styles = (theme: Theme) => createStyles({
   root: {
-    
   },
-  title: {
-
+  tileTitle: {
+    maxWidth: '100px',
+  },
+  tileSubTitle: {
+    maxWidth: '100px',
   },
   addButtonContainer: {
     position: 'relative'
@@ -209,7 +233,6 @@ const styles = (theme: Theme) => createStyles({
     padding: '6px 10px',
   },
   textField: {
-    
   },
   category: {
   },
@@ -226,10 +249,24 @@ const styles = (theme: Theme) => createStyles({
     color: 'rgba(255, 255, 255, 0.54)',
     padding: '0px 10px 6px 10px;',
   },
+  editIcon: {
+    position: 'absolute',
+    zIndex: 1,
+    float: 'right',
+    top: '6px',
+    right: '6px',
+  },
   price: {
     color: '#ffffff',
     display: 'inline-block',
     'margin-right': '10px',
+  },
+  description: {
+  },
+  '@media (max-width: 435px)': {
+    description: {
+      display: 'none'
+    }
   }
 });
 
