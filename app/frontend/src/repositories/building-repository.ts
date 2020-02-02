@@ -1,13 +1,9 @@
 import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import Building from "../models/building";
+import BaseRepository from "./base-repository";
 
-export default class BuildingRepository {
+export default class BuildingRepository extends BaseRepository {
   private readonly baseUrl = '/buildings';
-  private http: AxiosInstance;
-
-  public constructor() {
-    this.http = axios;
-  }
 
   public index(boundary: any = {}): Promise<Building[]> {
     return this.http.get(this.baseUrl, boundary)

@@ -1,13 +1,8 @@
-import axios, {AxiosInstance} from 'axios'
 import Advertisement from "../models/advertisement";
+import BaseRepository from "./base-repository";
 
-export default class AdvertisementRepository {
+export default class AdvertisementRepository extends BaseRepository{
   private readonly baseUrl = '/buildings/{building_id}/advertisements';
-  private http: AxiosInstance;
-
-  public constructor()  {
-    this.http = axios;
-  }
 
   public index(building_id: string): Promise<Advertisement[]> {
     return this.http.get(this.url(building_id))

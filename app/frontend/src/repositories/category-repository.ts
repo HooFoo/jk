@@ -1,13 +1,9 @@
-import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import Category from "../models/category";
+import BaseRepository from "./base-repository";
+import { AxiosResponse } from "axios";
 
-export default class CategoryRepository {
+export default class CategoryRepository extends BaseRepository {
   private readonly baseUrl = '/buildings/{building_id}/categories';
-  private http: AxiosInstance;
-
-  public constructor() {
-    this.http = axios;
-  }
 
   public index(building_id: string): Promise<Category[]> {
     return this.http.get(this.url(building_id))

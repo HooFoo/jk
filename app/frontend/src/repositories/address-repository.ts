@@ -1,13 +1,8 @@
-import axios, { AxiosInstance } from 'axios';
 import Building from "../models/building";
+import BaseRepository from "./base-repository";
 
-export default class AddressRepository {
+export default class AddressRepository extends BaseRepository {
   private readonly baseUrl: string = '/address';
-  private http: AxiosInstance;
-
-  public constructor() {
-    this.http = axios;
-  }
 
   public index(address = ''): Promise<Building> {
     return this.http.get(this.baseUrl, { params: { address } })
