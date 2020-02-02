@@ -1,21 +1,18 @@
-import Http from '../helpers/fetch-helpers';
+import axios, { AxiosInstance } from 'axios';
 import Building from "../models/building";
-import Injectable from "../dipendency-injection/injectable";
-import { Inject } from '../dipendency-injection/inject.decorator';
 
-export default class AddressRepository extends Injectable {
-  private readonly baseUrl: string = '/api/v1/address';
-  private http: Http;
+export default class AddressRepository {
+  private readonly baseUrl: string = '/address';
+  private http: AxiosInstance;
 
-  @Inject
-  public inject(http: Http): void {
-    this.http = http;
+  public constructor() {
+    this.http = axios;
   }
 
   public index(address = ''): Promise<Building> {
-    return this.http.get(this.baseUrl, { address })
-      .then((response) => {
-        return new Building(response.attributes);
+    return this.http.get(this.baseUrl, { params: { address } })
+      .then(({ data }: any) => {
+        return new Building(data.attributes);
       })
   }
 }

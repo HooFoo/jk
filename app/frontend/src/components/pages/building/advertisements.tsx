@@ -31,8 +31,8 @@ import AdvertisementRepository from '../../../repositories/advertisement-reposit
 import CategoryRepository from '../../../repositories/category-repository';
 import Advertisement from '../../../models/advertisement';
 import Category from '../../../models/category';
-import withDependencies from '../../../dipendency-injection/with-dependencies';
-import { ResolveDependencyProps } from '../../../dipendency-injection/resolve-dependency-props';
+import withDependencies from '../../../dependency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../../../dependency-injection/resolve-dependency-props';
 
 
 interface IProps extends WithStyles<typeof styles>, ResolveDependencyProps {
@@ -54,10 +54,10 @@ class Advertisements extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.сategoryRepository = props.resolve(CategoryRepository);
-    this.advertisementRepository = props.resolve(AdvertisementRepository);
+    this.сategoryRepository = new CategoryRepository();
+    this.advertisementRepository = new AdvertisementRepository();
 
-    this.state = { 
+    this.state = {
       isFetching: true,
       advertisements: [],
       categories: [],
@@ -103,7 +103,7 @@ class Advertisements extends React.Component<IProps, IState> {
     return history.push(`/building/${uid}/advertisement-add`)
   }
 
-  handleChange(name: any) { 
+  handleChange(name: any) {
     return (event: any) => {
       this.setState({
         ...this.state,
@@ -159,14 +159,14 @@ class Advertisements extends React.Component<IProps, IState> {
         <GridList cellHeight={180} className={classes.gridList}>
           {advertisements.map((tile, index) => (
             <GridListTile key={index}>
-              
+
               <img src={tile.img} alt={tile.title} />
               <GridListTileBar
                 title={tile.title}
                 subtitle={<span>{categories.find(x => x.id == tile.category)?.name}</span>}
                 actionIcon={
                   <React.Fragment>
-                    <Tooltip 
+                    <Tooltip
                       disableFocusListener
                       title={tile.description}
                       placement="left"
@@ -199,7 +199,7 @@ class Advertisements extends React.Component<IProps, IState> {
 
 const styles = (theme: Theme) => createStyles({
   root: {
-    
+
   },
   title: {
 
@@ -219,7 +219,7 @@ const styles = (theme: Theme) => createStyles({
     padding: '6px 10px',
   },
   textField: {
-    
+
   },
   category: {
   },

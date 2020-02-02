@@ -1,21 +1,18 @@
-import Http from '../helpers/fetch-helpers';
+import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import Category from "../models/category";
-import { Inject } from '../dipendency-injection/inject.decorator';
-import Injectable from '../dipendency-injection/injectable';
 
-export default class CategoryRepository extends Injectable {
-  private readonly baseUrl = '/api/v1/buildings/{building_id}/categories';
-  private http: Http;
+export default class CategoryRepository {
+  private readonly baseUrl = '/buildings/{building_id}/categories';
+  private http: AxiosInstance;
 
-  @Inject
-  public inject(http: Http): void {
-    this.http = http;
+  public constructor() {
+    this.http = axios;
   }
-  
+
   public index(building_id: string): Promise<Category[]> {
     return this.http.get(this.url(building_id))
-      .then((response) => {
-        return response.map((b: any) => {
+      .then(({ data }: AxiosResponse) => {
+        return data.map((b: any) => {
           return new Category(b.attributes);
         })
       })

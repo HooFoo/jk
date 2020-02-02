@@ -2,9 +2,8 @@ import * as mockData from './mock-data-import';
 import "../public/manifest.json";
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import './init';
 import { App } from './app';
-import Container from './dipendency-injection/container';
-import AddressRepository from './repositories/address-repository';
 
 mockData;
 

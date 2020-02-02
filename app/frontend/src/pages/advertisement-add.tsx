@@ -29,8 +29,8 @@ import NavBar from '../components/shared/nav-bar';
 import { deepOrange } from '@material-ui/core/colors'
 import { RouteComponentProps } from 'react-router-dom';
 import Category from '../models/category';
-import withDependencies from '../dipendency-injection/with-dependencies';
-import { ResolveDependencyProps } from '../dipendency-injection/resolve-dependency-props';
+import withDependencies from '../dependency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../dependency-injection/resolve-dependency-props';
 
 const CssTextField = withStyles({
   root: {
@@ -112,10 +112,10 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.сategoryRepository = props.resolve(CategoryRepository);
-    this.advertisementRepository = props.resolve(AdvertisementRepository);
+    this.сategoryRepository = new CategoryRepository();
+    this.advertisementRepository = new AdvertisementRepository();
 
-    this.state = { 
+    this.state = {
       title: '',
       description: '',
       price: 0,
@@ -161,7 +161,7 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
     });
   };
 
-  handleChange(name:any) { 
+  handleChange(name:any) {
     return (event: any) => {
       this.setState({
         ...this.state,
