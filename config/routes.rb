@@ -2,8 +2,14 @@
 
 Rails.application.routes.draw do
   namespace :api do
+    namespace :v1 do
+      get 'categories/index'
+    end
+  end
+  namespace :api do
     namespace :v1, defaults: { format: :json } do
       resources :address, only: [:index]
+      resources :categories, only: :index
       resources :buildings, only: [:index, :show] do
         scope module: :buildings do
           resources :advertisements
