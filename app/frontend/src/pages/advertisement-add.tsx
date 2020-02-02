@@ -138,7 +138,7 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
   fetchCategories() {
     const { match: { params: { uid } } } = this.props;
 
-    return this.сategoryRepository.index(uid).then(data => {
+    return this.сategoryRepository.index().then(data => {
       this.setState({...this.state, categories: data, isFetching: false });
     }).catch(error => {
       console.log(error);

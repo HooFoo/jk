@@ -15,6 +15,10 @@ def read_data(filename)
   JSON.parse(File.read(File.join(MOCKS_PATH, filename)))
 end
 
+# create user
+
+user = User.create(email: 'user@example.com', password: '123456', password_confirmation: '123456')
+
 # import buildings and adds data
 buildings_data = read_data 'buildings.json'
 ads_data = read_data 'chat-advertisements.json'
@@ -30,12 +34,13 @@ buildings_data['data'].each do |data|
     attributes[:due_in] = attributes.delete('due-in')
     attributes[:building_id] = building.id
     attributes.delete('id')
+    attributes[:user_id] = user.id
     img = attributes.delete('img')
     advertisement = Advertisement.create(attributes)
 
     if img.present?
       file = open(img)
-      advertisement.photos.attach(io: file, filename: "advertisement-#{advertisement.id}")
+      advertisement.photos.attach(io: file, filename: "advertisement-#{advertisement.id}.jpg")
     end
   end
 end

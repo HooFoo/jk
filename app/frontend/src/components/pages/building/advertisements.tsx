@@ -74,7 +74,7 @@ class Advertisements extends React.Component<IProps, IState> {
   }
 
   fetchCategories() {
-    return this.сategoryRepository.index(this.props.uid).then(data => {
+    return this.сategoryRepository.index().then(data => {
       this.setState({
         ...this.state,
         categories: data

@@ -23,8 +23,8 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 axios.interceptors.request.use((config: any) => {
-  console.log('intercept request', config);
-  if  (process.env.MODE == "mockdata" || !MOCKED_URLS[config['url']]) {
+  console.log('intercept request', config, process.env.MODE);
+  if  (process.env.MODE == "mockdata" && MOCKED_URLS[config['url']]) {
     config['url'] = MOCKED_URLS[config['url']];
     config['method'] = 'get';
   }
