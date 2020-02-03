@@ -23,7 +23,7 @@ class ChatPage extends React.Component<IProps, IState> {
 
   render() {
     return (
-      <h1>Диман, когда будет чат?</h1>
+      <h1>Тут скоро будет чат</h1>
     );
   }
 }

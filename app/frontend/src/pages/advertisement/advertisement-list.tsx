@@ -104,9 +104,17 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
   }
 
   onEditClick(id: string) {
-    return () => {
+    return (event: any) => {
+      event.stopPropagation();
       const { history } = this.props;
       return history.push(`/building/${this.uid}/advertisements/edit/${id}`)
+    };
+  }
+
+  onViewClick(id: string) {
+    return () => {
+      const { history } = this.props;
+      return history.push(`/building/${this.uid}/advertisements/view/${id}`)
     };
   }
 
@@ -156,7 +164,10 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
 
         <GridList cellHeight={180} className={classes.gridList}>
           {advertisements.map((tile, index) => (
-            <GridListTile key={index}>
+            <GridListTile
+              key={index}
+              className={classes.gridItem}
+              onClick={this.onViewClick(tile.id)}>
                {tile.editable &&
                 <Fab
                   size="small"
@@ -244,6 +255,12 @@ const styles = (theme: Theme) => createStyles({
     height: 'calc(100vh - 188px)',
     overflow: 'auto',
     margin: '0!important',
+  },
+  gridItem: {
+    cursor: 'pointer',
+    '&:hover': {
+      boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
+    }
   },
   icon: {
     color: 'rgba(255, 255, 255, 0.54)',
