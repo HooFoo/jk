@@ -29,7 +29,7 @@ class MapYandexWrapper extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.buildingRepository = new BuildingRepository();
+    this.buildingRepository = props.resolve(BuildingRepository);
 
     this.state = {
       hasLocation: false,

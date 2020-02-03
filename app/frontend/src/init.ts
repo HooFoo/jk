@@ -11,9 +11,7 @@ const MOCKED_URLS : Dictionary = {
   "/buildings/1074669391/advertisements": "chat-advertisements.json",
   "/buildings/1074669392/advertisements": "chat-advertisements.json",
   "/buildings/1074669393/advertisements": "chat-advertisements.json",
-  "/buildings/1074669391/categories": "chat-categories.json",
-  "/buildings/1074669392/categories": "chat-categories.json",
-  "/buildings/1074669393/categories": "chat-categories.json",
+  "/categories": "chat-categories.json",
 };
 
 if (process.env.MODE !== "mockdata") axios.defaults.baseURL = `/api/v1`;
