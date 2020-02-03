@@ -54,8 +54,8 @@ class Advertisements extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.сategoryRepository = new CategoryRepository();
-    this.advertisementRepository = new AdvertisementRepository();
+    this.сategoryRepository = props.resolve(CategoryRepository);
+    this.advertisementRepository = props.resolve(AdvertisementRepository);
 
     this.state = {
       isFetching: true,

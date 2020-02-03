@@ -29,7 +29,7 @@ class AddressSelectPage extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.addressRepository = new AddressRepository();
+    this.addressRepository = props.resolve(AddressRepository)
 
     this.state = {
       address: "",
