@@ -17,7 +17,7 @@ import {
   Theme,
 } from '@material-ui/core';
 
-import DropzoneArea from '../../components/dropzone/dropzone-area';
+import DropzoneArea from '../../lib/dropzone/dropzone-area';
 import MaskedInput from 'react-text-mask';
 import NumberFormat from 'react-number-format';
 
