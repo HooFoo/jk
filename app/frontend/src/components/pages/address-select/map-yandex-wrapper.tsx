@@ -5,8 +5,8 @@ import BuildingRepository from "../../../repositories/building-repository";
 import Building from "../../../models/building";
 import { WithStyles, Theme } from "@material-ui/core";
 
-import withDependencies from "../../../dipendency-injection/with-dependencies";
-import { ResolveDependencyProps } from "../../../dipendency-injection/resolve-dependency-props";
+import withDependencies from "../../../dependency-injection/with-dependencies";
+import { ResolveDependencyProps } from "../../../dependency-injection/resolve-dependency-props";
 
 interface IProps extends WithStyles<typeof styles>, ResolveDependencyProps {
   onAddressSelect: (address: string, uid: string) => void;
@@ -29,7 +29,7 @@ class MapYandexWrapper extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.buildingRepository = props.resolve(BuildingRepository);
+    this.buildingRepository = new BuildingRepository();
 
     this.state = {
       hasLocation: false,

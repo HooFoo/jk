@@ -1,21 +1,13 @@
-import Http from '../helpers/fetch-helpers';
 import Building from "../models/building";
-import Injectable from "../dipendency-injection/injectable";
-import { Inject } from '../dipendency-injection/inject.decorator';
+import BaseRepository from "./base-repository";
 
-export default class AddressRepository extends Injectable {
-  private readonly baseUrl: string = '/api/v1/address';
-  private http: Http;
-
-  @Inject
-  public inject(http: Http): void {
-    this.http = http;
-  }
+export default class AddressRepository extends BaseRepository {
+  private readonly baseUrl: string = '/address';
 
   public index(address = ''): Promise<Building> {
-    return this.http.get(this.baseUrl, { address })
-      .then((response) => {
-        return new Building(response.attributes);
+    return this.http.get(this.baseUrl, { params: { address } })
+      .then(({ data }: any) => {
+        return new Building(data.attributes);
       })
   }
 }
