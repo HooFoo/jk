@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles'
-import { grey, deepOrange } from '@material-ui/core/colors';
+import { grey, red, deepOrange } from '@material-ui/core/colors';
 
 import { Routes } from './routes';
 
@@ -12,7 +12,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: deepOrange[500]
-    },
+    }
   },
   typography: {
     // // Use the system font instead of the default Roboto font.

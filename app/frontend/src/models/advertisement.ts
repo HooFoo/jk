@@ -10,6 +10,7 @@ export default class Advertisement {
   public phone: string;
   public files: string[];
   public editable: boolean;
+  public createdDate: string;
 
   constructor(params: any) {
     Object.assign(this, params)

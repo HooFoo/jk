@@ -29,6 +29,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import Category from '../../models/category';
 import withDependencies from '../../dependency-injection/with-dependencies';
 import { ResolveDependencyProps } from '../../dependency-injection/resolve-dependency-props';
+import Advertisement from '../../models/advertisement';
 
 const CssTextField = withStyles({
   root: {
@@ -131,6 +132,7 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
     };
 
     this.onSaveClick = this.onSaveClick.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onImagesDropZoneChange = this.onImagesDropZoneChange.bind(this);
   }
@@ -145,7 +147,10 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
 
     promise.then(() => {
       this.setState({...this.state, isFetching: false });
-    });
+    }).catch(error => {
+      console.log(error);
+      this.setState({...this.state, error: error, isFetching: false });
+    });;
   }
 
   fetchCategories(): Promise<any> {
@@ -191,12 +196,40 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
       ? this.advertisementRepository.update(uid, this.state.id, params)
       : this.advertisementRepository.create(uid, params);
 
-    savePromise.then(() => {
-      return history.push(`/building/${uid}/advertisements`);
+    this.setState({
+      ...this.state,
+      isFetching: true,
+    });
+
+    savePromise.then((entity: Advertisement) => {
+      return history.push(`/building/${uid}/advertisements/view/${entity.id}`);
     }).catch(error => {
-      this.setState({...this.state, error: error && error.message ? error.message : "Ошибка сохранения."});
+      this.setState({
+        ...this.state,
+        error: error && error.message ? error.message : "Ошибка сохранения.",
+        isFetching: false,
+      });
     });
   };
+
+  onDeleteClick(event: any){
+    const { history, match: { params: { uid } } } = this.props;
+
+    this.setState({
+      ...this.state,
+      isFetching: true,
+    });
+
+    this.advertisementRepository.delete(uid, this.state.id).then(() => {
+      return history.push(`/building/${uid}/advertisements`);
+    }).catch(error => {
+      this.setState({
+        ...this.state,
+        error: error && error.message ? error.message : "Ошибка сохранения.",
+        isFetching: false,
+      });
+    });
+  }
 
   handleChange(name:any) {
     return (event: any) => {
@@ -213,7 +246,6 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
 
   render() {
     const { classes } = this.props;
-    const { match: { params: { uid } } } = this.props;
 
     return (<React.Fragment>
       <Container maxWidth="md" className={classes.root}>
@@ -310,6 +342,13 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
             <Button variant="outlined" color="secondary" onClick={this.onSaveClick} disabled={this.state.isFetching}>
               {this.state.id ? 'Сохранить' : 'Добавить объявление'}
             </Button>
+
+            {this.state.id &&
+              <Button className={classes.deleteButton} variant="outlined" onClick={this.onDeleteClick} disabled={this.state.isFetching}>
+                Удалить
+              </Button>
+            }
+
           </FormControl>
         </Paper>
       </Container>
@@ -380,7 +419,10 @@ const styles = (theme: Theme) => createStyles({
     }
   },
   formButtons: {
-    'margin-top': '14px',
+    marginTop: '14px',
+  },
+  deleteButton: {
+    marginLeft: theme.spacing(2),
   }
 });
 
