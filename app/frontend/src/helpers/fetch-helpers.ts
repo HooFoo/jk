@@ -2,8 +2,8 @@ import axios, { AxiosResponse } from 'axios';
 import * as humps from 'humps';
 
 import FailResponseError from './fail-response-error';
-import Injectable from '../dipendency-injection/injectable';
-import { Inject } from '../dipendency-injection/inject.decorator';
+import Injectable from '../dependency-injection/injectable';
+import { Inject } from '../dependency-injection/inject.decorator';
 
 type Dictionary = { [index: string]: string }
 
@@ -72,10 +72,10 @@ export default class Http extends Injectable {
     if (response.status >= 400) {
       throw new FailResponseError(response, response.data.errors, response.data);
     }
-  
+
     return response;
   }
-  
+
   private extractData(response: AxiosResponse<any>) {
     return response.data.data;
   }
@@ -135,7 +135,7 @@ export default class Http extends Injectable {
     if  (process.env.MODE != "mockdata" || !this.mockedUrls[url]) {
       return action();
     }
-  
+
     return axios.get(this.mockedUrls[url])
       .then(this.checkSuccess)
       .then(this.extractData)

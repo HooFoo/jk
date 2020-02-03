@@ -22,8 +22,8 @@ import AdvertisementRepository from '../../repositories/advertisement-repository
 import { deepOrange } from '@material-ui/core/colors'
 import { RouteComponentProps } from 'react-router-dom';
 import Category from '../../models/category';
-import withDependencies from '../../dipendency-injection/with-dependencies';
-import { ResolveDependencyProps } from '../../dipendency-injection/resolve-dependency-props';
+import withDependencies from '../../dependency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../../dependency-injection/resolve-dependency-props';
 
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 

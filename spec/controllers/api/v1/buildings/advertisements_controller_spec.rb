@@ -9,7 +9,7 @@ RSpec.describe Api::V1::Buildings::AdvertisementsController, type: :controller d
 
   describe 'GET #index' do
     it 'returns existing ads' do
-      get :index, params: {building_id: building.id}
+      get :index, params: {building_id: building.uid}
 
       expect(response).to be_successful
     end
@@ -17,7 +17,7 @@ RSpec.describe Api::V1::Buildings::AdvertisementsController, type: :controller d
 
   describe 'GET #show' do
     it 'returns existing advertisement' do
-      get :show, params: {id: advertisement.id, building_id: building.id}
+      get :show, params: {id: advertisement.id, building_id: building.uid}
 
       expect(response).to be_successful
     end
@@ -29,7 +29,7 @@ RSpec.describe Api::V1::Buildings::AdvertisementsController, type: :controller d
     it 'returns creates new advertisement' do
       sign_in user
 
-      with_building = params.merge({building_id: building.id})
+      with_building = params.merge({building_id: building.uid})
       post :create, params: with_building
 
       expect(response).to be_successful
@@ -42,7 +42,7 @@ RSpec.describe Api::V1::Buildings::AdvertisementsController, type: :controller d
     it 'returns updated advertisement' do
       sign_in user
 
-      with_building = params.merge({building_id: building.id, id: advertisement.id})
+      with_building = params.merge({building_id: building.uid, id: advertisement.id})
       patch :update, params: with_building
 
       expect(response).to be_successful
@@ -55,7 +55,7 @@ RSpec.describe Api::V1::Buildings::AdvertisementsController, type: :controller d
     it 'destroys advertisement' do
       sign_in user
 
-      delete :destroy, params: {building_id: building.id, id: deletable.id}
+      delete :destroy, params: {building_id: building.uid, id: deletable.id}
 
       expect(response).to be_successful
     end

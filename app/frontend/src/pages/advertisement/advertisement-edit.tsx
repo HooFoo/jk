@@ -27,8 +27,8 @@ import CategoryRepository from '../../repositories/category-repository';
 import { deepOrange } from '@material-ui/core/colors'
 import { RouteComponentProps } from 'react-router-dom';
 import Category from '../../models/category';
-import withDependencies from '../../dipendency-injection/with-dependencies';
-import { ResolveDependencyProps } from '../../dipendency-injection/resolve-dependency-props';
+import withDependencies from '../../dependency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../../dependency-injection/resolve-dependency-props';
 
 const CssTextField = withStyles({
   root: {
@@ -149,7 +149,7 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
   }
 
   fetchCategories(): Promise<any> {
-    return this.сategoryRepository.index(this.props.match.params.uid).then(data => {
+    return this.сategoryRepository.index().then(data => {
       this.setState({...this.state, categories: data });
     }).catch(error => {
       console.log(error);
@@ -198,7 +198,7 @@ class AdvertisementEditPage extends React.Component<IProps, IState> {
     });
   };
 
-  handleChange(name:any) { 
+  handleChange(name:any) {
     return (event: any) => {
       this.setState({
         ...this.state,

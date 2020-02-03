@@ -32,8 +32,8 @@ import AdvertisementRepository from '../../repositories/advertisement-repository
 import CategoryRepository from '../../repositories/category-repository';
 import Advertisement from '../../models/advertisement';
 import Category from '../../models/category';
-import withDependencies from '../../dipendency-injection/with-dependencies';
-import { ResolveDependencyProps } from '../../dipendency-injection/resolve-dependency-props';
+import withDependencies from '../../dependency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../../dependency-injection/resolve-dependency-props';
 import "../../helpers/string.extensions";
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any>, ResolveDependencyProps {
@@ -56,7 +56,7 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
     this.сategoryRepository = props.resolve(CategoryRepository);
     this.advertisementRepository = props.resolve(AdvertisementRepository);
 
-    this.state = { 
+    this.state = {
       isFetching: true,
       advertisements: [],
       categories: [],
@@ -73,8 +73,7 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
   }
 
   fetchCategories() {
-    const uid = this.props.match.params.uid;
-    return this.сategoryRepository.index(this.uid).then(data => {
+    return this.сategoryRepository.index().then(data => {
       this.setState({
         ...this.state,
         categories: data
@@ -222,6 +221,7 @@ class AdvertisementListPage extends React.Component<IProps, IState> {
 
 const styles = (theme: Theme) => createStyles({
   root: {
+
   },
   tileTitle: {
     maxWidth: '100px',

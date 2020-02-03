@@ -1,21 +1,13 @@
-import Http from '../helpers/fetch-helpers';
 import Advertisement from "../models/advertisement";
-import Injectable from '../dipendency-injection/injectable';
-import { Inject } from '../dipendency-injection/inject.decorator';
+import BaseRepository from "./base-repository";
 
-export default class AdvertisementRepository extends Injectable {
-  private readonly baseUrl = '/api/v1/buildings/{building_id}/advertisements';
-  private http: Http;
+export default class AdvertisementRepository extends BaseRepository{
+  private readonly baseUrl = '/buildings/{building_id}/advertisements';
 
-  @Inject
-  public inject(http: Http): void {
-    this.http = http;
-  }
-  
   public index(building_id: string): Promise<Advertisement[]> {
     return this.http.get(this.url(building_id))
-      .then((response) => {
-        return response.map((b: any) => {
+      .then(({ data }: any) => {
+        return data.map((b: any) => {
           return new Advertisement(b.attributes);
         })
       })
@@ -23,22 +15,22 @@ export default class AdvertisementRepository extends Injectable {
 
   public show(building_id: string, id: string): Promise<Advertisement> {
     return this.http.get(this.url(building_id, id))
-      .then((response) => {
-        return new Advertisement(response.attributes);
+      .then(({ data }: any) => {
+        return new Advertisement(data.attributes);
       })
   }
 
   public create(building_id: string, params: any): Promise<Advertisement> {
     return this.http.post(this.url(building_id), params)
-      .then((response) => {
-        return new Advertisement(response.attributes);
+      .then(({ data }: any) => {
+        return new Advertisement(data.attributes);
       })
   }
 
   public update(building_id: string, id: string, params: any): Promise<Advertisement> {
     return this.http.put(this.url(building_id, id), params)
-      .then((response) => {
-        return new Advertisement(response.attributes);
+      .then(({ data }: any) => {
+        return new Advertisement(data.attributes);
       })
   }
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_26_074453) do
+ActiveRecord::Schema.define(version: 2020_02_02_200030) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -61,6 +61,29 @@ ActiveRecord::Schema.define(version: 2019_10_26_074453) do
     t.index ["full_address"], name: "index_buildings_on_full_address"
     t.index ["latitude", "longitude"], name: "index_buildings_on_latitude_and_longitude"
     t.index ["uid"], name: "index_buildings_on_uid"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.integer "building_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["building_id"], name: "index_chats_on_building_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.text "text"
+    t.integer "chat_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

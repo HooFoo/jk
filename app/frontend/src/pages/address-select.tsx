@@ -10,8 +10,8 @@ import { Button, Container, Grid, Snackbar, Typography, Theme } from '@material-
 import AddressRepository from "../repositories/address-repository";
 
 import MapYandexWrapper from '../components/pages/address-select/map-yandex-wrapper';
-import { ResolveDependencyProps } from '../dipendency-injection/resolve-dependency-props';
-import withDependencies from '../dipendency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../dependency-injection/resolve-dependency-props';
+import withDependencies from '../dependency-injection/with-dependencies';
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any>, ResolveDependencyProps {
 }
@@ -29,7 +29,7 @@ class AddressSelectPage extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.addressRepository = props.resolve(AddressRepository);
+    this.addressRepository = props.resolve(AddressRepository)
 
     this.state = {
       address: "",

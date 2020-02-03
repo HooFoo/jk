@@ -4,8 +4,8 @@ import { withStyles, WithStyles } from '@material-ui/styles';
 
 import { Theme, createStyles } from '@material-ui/core/styles';
 
-import withDependencies from '../dipendency-injection/with-dependencies';
-import { ResolveDependencyProps } from '../dipendency-injection/resolve-dependency-props';
+import withDependencies from '../dependency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../dependency-injection/resolve-dependency-props';
 import { RouteComponentProps } from 'react-router-dom';
 
 

@@ -37,6 +37,7 @@ describe 'Advertisements API' do
                  }
                }
         let(:id) { advertisement.id }
+        let(:building_id) { building.uid }
         run_test!
       end
     end
