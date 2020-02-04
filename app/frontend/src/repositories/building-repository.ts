@@ -1,9 +1,14 @@
 import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import Building from "../models/building";
 import BaseRepository from "./base-repository";
+import { Inject } from '../dependency-injection/inject.decorator';
 
 export default class BuildingRepository extends BaseRepository {
   private readonly baseUrl = '/buildings';
+
+  @Inject
+  public inject(): void {
+  }
 
   public index(boundary: any = {}): Promise<Building[]> {
     return this.http.get(this.baseUrl, { params: boundary })

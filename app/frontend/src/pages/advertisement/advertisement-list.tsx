@@ -1,11 +1,12 @@
 import * as React from 'react';
-import * as H from 'history';
+import { RouteComponentProps } from 'react-router-dom';
 
 import { withStyles, WithStyles } from '@material-ui/styles';
 
 import { Theme, createStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 import {
   Typography,
@@ -27,17 +28,15 @@ import {
   Zoom
 } from '@material-ui/core';
 
-import AdvertisementRepository from '../../../repositories/advertisement-repository';
-import CategoryRepository from '../../../repositories/category-repository';
-import Advertisement from '../../../models/advertisement';
-import Category from '../../../models/category';
-import withDependencies from '../../../dependency-injection/with-dependencies';
-import { ResolveDependencyProps } from '../../../dependency-injection/resolve-dependency-props';
+import AdvertisementRepository from '../../repositories/advertisement-repository';
+import CategoryRepository from '../../repositories/category-repository';
+import Advertisement from '../../models/advertisement';
+import Category from '../../models/category';
+import withDependencies from '../../dependency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../../dependency-injection/resolve-dependency-props';
+import "../../helpers/string.extensions";
 
-
-interface IProps extends WithStyles<typeof styles>, ResolveDependencyProps {
-  uid: string,
-  history: H.History<H.LocationState>
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any>, ResolveDependencyProps {
 }
 
 interface IState {
@@ -47,7 +46,7 @@ interface IState {
   categoryValue: string,
 }
 
-class Advertisements extends React.Component<IProps, IState> {
+class AdvertisementListPage extends React.Component<IProps, IState> {
   private сategoryRepository: CategoryRepository;
   private advertisementRepository: AdvertisementRepository;
 
@@ -86,7 +85,7 @@ class Advertisements extends React.Component<IProps, IState> {
   }
 
   fetchAdvertisements() {
-    this.advertisementRepository.index(this.props.uid).then(data => {
+    this.advertisementRepository.index(this.uid).then(data => {
       this.setState({
         ...this.state,
         advertisements: data,
@@ -99,11 +98,26 @@ class Advertisements extends React.Component<IProps, IState> {
   }
 
   onAddClick() {
-    const { uid, history } = this.props;
-    return history.push(`/building/${uid}/advertisement-add`)
+    const { history } = this.props;
+    return history.push(`/building/${this.uid}/advertisements/edit`)
   }
 
-  handleChange(name: any) {
+  onEditClick(id: string) {
+    return (event: any) => {
+      event.stopPropagation();
+      const { history } = this.props;
+      return history.push(`/building/${this.uid}/advertisements/edit/${id}`)
+    };
+  }
+
+  onViewClick(id: string) {
+    return () => {
+      const { history } = this.props;
+      return history.push(`/building/${this.uid}/advertisements/view/${id}`)
+    };
+  }
+
+  handleChange(name: any) { 
     return (event: any) => {
       this.setState({
         ...this.state,
@@ -112,28 +126,19 @@ class Advertisements extends React.Component<IProps, IState> {
     };
   }
 
-  getCurrencySymbol = (currency: string) => {
-    switch(currency){
-      case 'RUB':
-        return '₽';
-      case 'USD':
-        return '$';
-      case 'EUR':
-        return '€';
-      default:
-        return 'unknown currency';
-    }
+  private get uid() {
+    return this.props.match.params.uid;
   }
 
   render() {
-    const { classes, uid } = this.props;
+    const { classes } = this.props;
     const { isFetching, categories, advertisements } = this.state;
 
     return (
       <div className={classes.root}>
         <Paper className={classes.filters}>
 
-          <Box fontFamily="fontFamily" className={classes.title}>
+          <Box fontFamily="fontFamily">
             <Typography variant="h5">Объявления</Typography>
           </Box>
 
@@ -158,15 +163,32 @@ class Advertisements extends React.Component<IProps, IState> {
 
         <GridList cellHeight={180} className={classes.gridList}>
           {advertisements.map((tile, index) => (
-            <GridListTile key={index}>
-
+            <GridListTile
+              key={index}
+              className={classes.gridItem}
+              onClick={this.onViewClick(tile.id)}>
+               {tile.editable &&
+                <Fab
+                  size="small"
+                  color="secondary"
+                  aria-label="edit"
+                  className={classes.editIcon}
+                  onClick={this.onEditClick(tile.id)}>
+                  <EditIcon />
+                </Fab>
+              }
               <img src={tile.img} alt={tile.title} />
               <GridListTileBar
                 title={tile.title}
                 subtitle={<span>{categories.find(x => x.id == tile.category)?.name}</span>}
+                classes={{
+                  title: classes.tileTitle,
+                  subtitle: classes.tileSubTitle,
+                }}
                 actionIcon={
                   <React.Fragment>
                     <Tooltip
+                      className={classes.description}
                       disableFocusListener
                       title={tile.description}
                       placement="left"
@@ -175,7 +197,7 @@ class Advertisements extends React.Component<IProps, IState> {
                         <InfoIcon />
                       </IconButton>
                     </Tooltip>
-                    <Typography className={classes.price} variant="h5">{tile.price} {this.getCurrencySymbol(tile.currency)}</Typography>
+                    <Typography className={classes.price} variant="h5">{tile.price} {tile.currency.getCurrencySymbol()}</Typography>
                   </React.Fragment>
                 }
               />
@@ -201,8 +223,11 @@ const styles = (theme: Theme) => createStyles({
   root: {
 
   },
-  title: {
-
+  tileTitle: {
+    maxWidth: '100px',
+  },
+  tileSubTitle: {
+    maxWidth: '100px',
   },
   addButtonContainer: {
     position: 'relative'
@@ -219,7 +244,6 @@ const styles = (theme: Theme) => createStyles({
     padding: '6px 10px',
   },
   textField: {
-
   },
   category: {
   },
@@ -232,15 +256,35 @@ const styles = (theme: Theme) => createStyles({
     overflow: 'auto',
     margin: '0!important',
   },
+  gridItem: {
+    cursor: 'pointer',
+    '&:hover': {
+      boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
+    }
+  },
   icon: {
     color: 'rgba(255, 255, 255, 0.54)',
     padding: '0px 10px 6px 10px;',
+  },
+  editIcon: {
+    position: 'absolute',
+    zIndex: 1,
+    float: 'right',
+    top: '6px',
+    right: '6px',
   },
   price: {
     color: '#ffffff',
     display: 'inline-block',
     'margin-right': '10px',
+  },
+  description: {
+  },
+  '@media (max-width: 435px)': {
+    description: {
+      display: 'none'
+    }
   }
 });
 
-export default withStyles(styles)(withDependencies(Advertisements));
+export default withStyles(styles)(withDependencies(AdvertisementListPage));

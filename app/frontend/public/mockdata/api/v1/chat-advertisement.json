@@ -1,0 +1,26 @@
+{
+  "data": {
+    "id": "1",
+    "type": "advertisements",
+    "attributes": {
+      "id": "1",
+      "title": "Title1",
+      "description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.\nNunc viverra imperdiet enim. Fusce est. Vivamus a tellus.\nPellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.\nAenean nec lorem. In porttitor. Donec laoreet nonummy augue.\nSuspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.\n",
+      "price": 1000,
+      "currency": "RUB",
+      "due-in": "2019-10-22T06:15:20.791Z",
+      "createdDate": "3 сентября 2019",
+      "category": 1,
+      "phone": "+79112223344",
+      "editable": true,
+      "files": [
+        "https://i0.wp.com/thepointsguy.com/wp-content/uploads/2019/05/chantal-garnier-1464696-unsplash.jpg",
+        "https://ichef.bbci.co.uk/wwfeatures/live/976_549/images/live/p0/6s/kw/p06skw9l.jpg",
+        "https://i0.wp.com/thepointsguy.com/wp-content/uploads/2019/05/chantal-garnier-1464696-unsplash.jpg",
+        "https://ichef.bbci.co.uk/wwfeatures/live/976_549/images/live/p0/6s/kw/p06skw9l.jpg",
+        "https://i0.wp.com/thepointsguy.com/wp-content/uploads/2019/05/chantal-garnier-1464696-unsplash.jpg",
+        "https://ichef.bbci.co.uk/wwfeatures/live/976_549/images/live/p0/6s/kw/p06skw9l.jpg"
+      ]
+    }
+  }
+}

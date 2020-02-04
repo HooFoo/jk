@@ -12,7 +12,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: deepOrange[500]
-    },
+    }
   },
   typography: {
     // // Use the system font instead of the default Roboto font.

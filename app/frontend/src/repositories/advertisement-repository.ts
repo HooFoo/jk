@@ -1,8 +1,13 @@
 import Advertisement from "../models/advertisement";
 import BaseRepository from "./base-repository";
+import { Inject } from "../dependency-injection/inject.decorator";
 
 export default class AdvertisementRepository extends BaseRepository{
   private readonly baseUrl = '/buildings/{building_id}/advertisements';
+
+  @Inject
+  public inject(): void {
+  }
 
   public index(building_id: string): Promise<Advertisement[]> {
     return this.http.get(this.url(building_id))

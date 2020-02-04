@@ -17,20 +17,19 @@ import {
   Theme,
 } from '@material-ui/core';
 
-import { DropzoneArea } from 'material-ui-dropzone'
+import DropzoneArea from '../../lib/dropzone/dropzone-area';
 import MaskedInput from 'react-text-mask';
 import NumberFormat from 'react-number-format';
 
-import AdvertisementRepository from '../repositories/advertisement-repository';
-import CategoryRepository from '../repositories/category-repository';
-
-import NavBar from '../components/shared/nav-bar';
+import AdvertisementRepository from '../../repositories/advertisement-repository';
+import CategoryRepository from '../../repositories/category-repository';
 
 import { deepOrange } from '@material-ui/core/colors'
 import { RouteComponentProps } from 'react-router-dom';
-import Category from '../models/category';
-import withDependencies from '../dependency-injection/with-dependencies';
-import { ResolveDependencyProps } from '../dependency-injection/resolve-dependency-props';
+import Category from '../../models/category';
+import withDependencies from '../../dependency-injection/with-dependencies';
+import { ResolveDependencyProps } from '../../dependency-injection/resolve-dependency-props';
+import Advertisement from '../../models/advertisement';
 
 const CssTextField = withStyles({
   root: {
@@ -94,18 +93,21 @@ interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any>, Re
 }
 
 interface IState {
+  id: string,
   title: string,
   description: string,
   price: number,
+  currency: string,
   phone: string,
   files: any[],
+  initialFiles: string[],
   categories: Category[],
   categoryValue: string,
   isFetching: boolean,
   error?: string,
 }
 
-class AdvertisementAddPage extends React.Component<IProps, IState> {
+class AdvertisementEditPage extends React.Component<IProps, IState> {
   private сategoryRepository: CategoryRepository;
   private advertisementRepository: AdvertisementRepository;
 
@@ -115,51 +117,119 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
     this.сategoryRepository = props.resolve(CategoryRepository);
     this.advertisementRepository = props.resolve(AdvertisementRepository);
 
-    this.state = {
+    this.state = { 
+      id: '',
       title: '',
       description: '',
       price: 0,
+      currency: 'RUB',
       phone: '+7',
       files: [],
+      initialFiles: [],
       categories: [],
       categoryValue: "",
       isFetching: true,
     };
 
     this.onSaveClick = this.onSaveClick.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onImagesDropZoneChange = this.onImagesDropZoneChange.bind(this);
   }
 
   componentDidMount() {
-    this.fetchCategories();
-  }
+    let promise = this.fetchCategories();
 
-  fetchCategories() {
-    const { match: { params: { uid } } } = this.props;
+    let id = this.props.match.params.id;
+    if (id) {
+      promise = promise.then(() => this.fetchAdvertisement(id));
+    }
 
-    return this.сategoryRepository.index().then(data => {
-      this.setState({...this.state, categories: data, isFetching: false });
+    promise.then(() => {
+      this.setState({...this.state, isFetching: false });
     }).catch(error => {
       console.log(error);
-      this.setState({...this.state, isFetching: false });
+      this.setState({...this.state, error: error, isFetching: false });
+    });;
+  }
+
+  fetchCategories(): Promise<any> {
+    return this.сategoryRepository.index().then(data => {
+      this.setState({...this.state, categories: data });
+    }).catch(error => {
+      console.log(error);
+      this.setState({...this.state, error: error });
+    });
+  }
+
+  fetchAdvertisement(id: string): Promise<any> {
+    return this.advertisementRepository.show(this.props.match.params.uid, id).then(data => {
+      this.setState({
+        ...this.state,
+        id: id,
+        title: data.title,
+        description: data.description,
+        categoryValue: data.category,
+        phone: data.phone,
+        price: data.price,
+        currency: data.currency,
+        initialFiles: data.files,
+      });
+    }).catch(error => {
+      console.log(error);
+      this.setState({...this.state, error: error });
     });
   }
 
   onSaveClick(event: any){
     const { history, match: { params: { uid } } } = this.props;
-    this.advertisementRepository.create(uid, {
+
+    const params = {
       title: this.state.title,
       description: this.state.description,
       phone: this.state.phone,
       files: this.state.files,
       categoryValue: this.state.categoryValue,
-    }).then(() => {
-      return history.push(`/building/${uid}`);
+    };
+
+    const savePromise = this.state.id
+      ? this.advertisementRepository.update(uid, this.state.id, params)
+      : this.advertisementRepository.create(uid, params);
+
+    this.setState({
+      ...this.state,
+      isFetching: true,
+    });
+
+    savePromise.then((entity: Advertisement) => {
+      return history.push(`/building/${uid}/advertisements/view/${entity.id}`);
     }).catch(error => {
-      this.setState({...this.state, error: error && error.message ? error.message : "Ошибка сохранения."});
+      this.setState({
+        ...this.state,
+        error: error && error.message ? error.message : "Ошибка сохранения.",
+        isFetching: false,
+      });
     });
   };
+
+  onDeleteClick(event: any){
+    const { history, match: { params: { uid } } } = this.props;
+
+    this.setState({
+      ...this.state,
+      isFetching: true,
+    });
+
+    this.advertisementRepository.delete(uid, this.state.id).then(() => {
+      return history.push(`/building/${uid}/advertisements`);
+    }).catch(error => {
+      this.setState({
+        ...this.state,
+        error: error && error.message ? error.message : "Ошибка сохранения.",
+        isFetching: false,
+      });
+    });
+  }
 
   handleChange(name:any) {
     return (event: any) => {
@@ -176,16 +246,13 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
 
   render() {
     const { classes } = this.props;
-    const { match: { params: { uid } } } = this.props;
 
     return (<React.Fragment>
-      <NavBar>
-      </NavBar>
       <Container maxWidth="md" className={classes.root}>
         <Paper className={classes.formContainer}>
 
           <Box fontFamily="fontFamily">
-            <Typography variant="h5">Новое объявление</Typography>
+            <Typography variant="h5">{this.state.id ? 'Редактирование' : 'Новое объявление'}</Typography>
           </Box>
 
           <FormControl className={classes.formControl}>
@@ -238,12 +305,15 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
               filesLimit={15}
               maxFileSize={50 * 1024 * 1024} // 50 MB
               dropzoneText="Выберите фотографии"
-              //showFileNames={true}
+              showPreviews={false}
+              showPreviewsInDropzone={true}
+              showFileNames={true}
               showFileNamesInPreview={true}
-              //getFileLimitExceedMessage={(filesLimit) => `Максимальное количество фотографий ${filesLimit}`}
-              //getFileAddedMessage={fileName => `Изображение ${fileName} загружено \n`}
-              //getFileRemovedMessage={fileName => `Изображение ${fileName} удалено`}
-              //getDropRejectMessage={(fileName, acceptedFiles, maxFileSize) => `Изображение ${fileName} несоответсвует разрешенным параметрам. Тип: ${acceptedFiles} Максимальный размер: ${maxFileSize / 1024 / 1024} МБ`}
+              initialFiles={this.state.initialFiles}
+              getFileLimitExceedMessage={(filesLimit: number) => `Максимальное количество фотографий ${filesLimit}`}
+              getFileAddedMessage={(fileName: string) => `Изображение ${fileName} загружено \n`}
+              getFileRemovedMessage={(fileName: string) => `Изображение ${fileName} удалено`}
+              getDropRejectMessage={(fileName: any, acceptedFiles: string[], maxFileSize: number) => `Изображение ${fileName} несоответсвует разрешенным параметрам. Тип: ${acceptedFiles} Максимальный размер: ${maxFileSize / 1024 / 1024} МБ`}
             />
           </FormControl>
 
@@ -252,7 +322,7 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
             <FilledInput
               id="filled-adornment-price"
               value={this.state.price}
-              startAdornment={<InputAdornment position="start">₽</InputAdornment>}
+              startAdornment={<InputAdornment position="start">{this.state.currency.getCurrencySymbol()}</InputAdornment>}
               inputComponent={NumberFormatCustom}
               onChange={this.handleChange('price')}
             />
@@ -270,8 +340,15 @@ class AdvertisementAddPage extends React.Component<IProps, IState> {
 
           <FormControl className={`${classes.formControl} ${classes.formButtons}`}>
             <Button variant="outlined" color="secondary" onClick={this.onSaveClick} disabled={this.state.isFetching}>
-              Добавить объявление
+              {this.state.id ? 'Сохранить' : 'Добавить объявление'}
             </Button>
+
+            {this.state.id &&
+              <Button className={classes.deleteButton} variant="outlined" onClick={this.onDeleteClick} disabled={this.state.isFetching}>
+                Удалить
+              </Button>
+            }
+
           </FormControl>
         </Paper>
       </Container>
@@ -284,7 +361,9 @@ const styles = (theme: Theme) => createStyles({
     padding: 0,
   },
   formContainer: {
-    margin: '5px',
+    height: 'calc(100vh - 91px)',
+    overflow: 'auto',
+    'margin-top': '10px',
     padding: '10px',
   },
   title: {
@@ -340,8 +419,11 @@ const styles = (theme: Theme) => createStyles({
     }
   },
   formButtons: {
-    'margin-top': '14px',
+    marginTop: '14px',
+  },
+  deleteButton: {
+    marginLeft: theme.spacing(2),
   }
 });
 
-export default withStyles(styles)(withDependencies(AdvertisementAddPage));
+export default withStyles(styles)(withDependencies(AdvertisementEditPage));

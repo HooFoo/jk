@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Switch, Route, Redirect } from 'react-router-dom';
 
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
 
@@ -11,14 +11,14 @@ import Tab from '@material-ui/core/Tab';
 import ChatTwoToneIcon from '@material-ui/icons/ChatTwoTone';
 import AddShoppingCartTwoToneIcon from '@material-ui/icons/AddShoppingCartTwoTone';
 
-import Advertisements from '../components/pages/building/advertisements';
 import NavBar from '../components/shared/nav-bar';
+
+import BuildingRouter from './building-router';
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
 }
 
 interface IState {
-  value: string
 }
 
 class BuildingPage extends React.Component<IProps, IState> {
@@ -27,25 +27,32 @@ class BuildingPage extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
-      value: "advertisements"
     };
 
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(event: any, newValue: string) {
-    this.setState({ value: newValue });
+  handleChange(event: any, value: string) {
+    const { history } = this.props;
+    return history.push(`/building/${this.uid}/${value}`)
   };
 
+  private get uid() {
+    return this.props.match.params.uid;
+  }
+
+  private get selectedTab() {
+    const selectedTab: string = this.props.match.params.section;
+    return selectedTab || "chat";
+  }
+
   render() {
-    const { classes, history } = this.props;
-    const { match: { params: { uid } } } = this.props;
-    const { value } = this.state;
+    const { classes } = this.props;
 
     return (<React.Fragment>
       <NavBar>
         <Tabs
-            value={value}
+            value={this.selectedTab}
             onChange={this.handleChange}
             variant="scrollable"
             scrollButtons="on"
@@ -58,18 +65,13 @@ class BuildingPage extends React.Component<IProps, IState> {
         </Tabs>
       </NavBar>
       <Container maxWidth="md" className={classes.content}>
-        { value == "advertisements" &&
-          <Advertisements uid={uid} history={history} />
-        }
+        <BuildingRouter />
       </Container>
     </React.Fragment>);
   }
 }
 
 const styles = (theme: Theme) => createStyles({
-  root: {
-    height: 'calc(100vh - 64px)',
-  },
   content: {
     padding: 0,
   }
