@@ -63,4 +63,4 @@ Rails.application.configure do
   config.active_storage.default_url_options = { host: 'localhost', port: 3001 }
   config.default_url_options = { host: 'localhost', port: 3001 }
 end
-Rails.application.routes.default_url_options = { host: 'localhost', port: 3000 }
+Rails.application.routes.default_url_options = { host: 'localhost', port: 3001 }
