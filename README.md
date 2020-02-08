@@ -10,6 +10,19 @@ Home Spot Backend application
 ## Development preparation
 
 ### Backend
+
+Uses dotenv gem.
+To set environment variables in development mode there shoulbe be created `.env` file in project root folder
+with environment variables, for eg
+```
+DEVISE_JWT_SECRET_KEY=YOUR_SECRET_VALUE
+```
+You can generate secret key with the next command 
+```
+rake secret
+```
+
+To run the project
 ```
 bundle install
 rails db:migrate
