@@ -4,7 +4,7 @@
 #
 # Table name: buildings
 #
-#  id           :integer          not null, primary key
+#  id           :bigint           not null, primary key
 #  address      :string
 #  full_address :string
 #  latitude     :decimal(, )

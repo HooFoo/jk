@@ -2,7 +2,7 @@
 #
 # Table name: jwt_blacklist
 #
-#  id  :integer          not null, primary key
+#  id  :bigint           not null, primary key
 #  jti :string           not null
 #
 # Indexes
