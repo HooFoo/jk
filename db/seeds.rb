@@ -34,6 +34,8 @@ buildings_data['data'].each do |data|
     attributes[:due_in] = attributes.delete('due-in')
     attributes[:building_id] = building.id
     attributes.delete('id')
+    attributes.delete('editable')
+    attributes.delete('createdDate')
     attributes[:user_id] = user.id
     img = attributes.delete('img')
     advertisement = Advertisement.create(attributes)
